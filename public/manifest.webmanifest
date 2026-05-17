@@ -1,0 +1,15 @@
+{
+    "background_color": "black",
+    "description": "Chekin - Ứng dụng kiểm tra nhanh chóng. Hey, at least it isn't cats.",
+    "display": "fullscreen",
+    "icons": [
+      {
+        "src": "images/icons/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "name": "Delfi Checkin Application",
+    "short_name": "Checkin",
+    "start_url": "/login"
+  }

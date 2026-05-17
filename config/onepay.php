@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'environment' => env('ONEPAY_ENV', 'sandbox'),
+    'merchant_id' => env('ONEPAY_MERCHANT_ID'),
+    'access_code' => env('ONEPAY_ACCESS_CODE'),
+    'secure_secret' => env('ONEPAY_SECURE_SECRET'),
+    'return_url' => env('ONEPAY_RETURN_URL', env('APP_URL') . '/payment/return'),
+    'callback_url' => env('ONEPAY_CALLBACK_URL', env('APP_URL') . '/api/payments/onepay/ipn'),
+    'payment_url' => env('ONEPAY_PAYMENT_URL', 'https://mtf.onepay.vn/paygate/vpcpay.op'),
+    'querydr_url' => env('ONEPAY_QUERYDR_URL', 'https://mtf.onepay.vn/paygate/Vpcdps.op'),
+    'version' => env('ONEPAY_VERSION', '2'),
+    'command' => env('ONEPAY_COMMAND', 'pay'),
+    'querydr_command' => env('ONEPAY_QUERYDR_COMMAND', 'queryDR'),
+    'currency' => env('ONEPAY_CURRENCY', 'VND'),
+    'locale' => env('ONEPAY_LOCALE', 'vn'),
+    'ticket_no' => env('ONEPAY_TICKET_NO', '127.0.0.1'),
+    'user' => env('ONEPAY_USER'),
+    'transaction_type' => env('ONEPAY_TRANSACTION_TYPE', '01'),
+    'order_expiry_minutes' => env('ONEPAY_ORDER_EXPIRY_MINUTES', 15),
+    'querydr_retry_enabled' => env('ONEPAY_QUERYDR_RETRY_ENABLED', false),
+    'querydr_timeout_seconds' => env('ONEPAY_QUERYDR_TIMEOUT_SECONDS', 10),
+    'querydr_connect_timeout_seconds' => env('ONEPAY_QUERYDR_CONNECT_TIMEOUT_SECONDS', 3),
+    'querydr_retry_times' => env('ONEPAY_QUERYDR_RETRY_TIMES', 1),
+    'querydr_retry_sleep_milliseconds' => env('ONEPAY_QUERYDR_RETRY_SLEEP_MILLISECONDS', 200),
+];

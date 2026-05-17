@@ -1,0 +1,78 @@
+@font-face {
+    font-family: 'utmbebas';
+    src: url('/assets/fonts/utmbebas/UTM-Bebas.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+.box-container {
+    display: flex;
+}
+.raffle-box, .simple-box {
+    /* width: 200px; */
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background-color: #f0a608;*/
+    /* border: 8px solid silver; */
+    color: #ffffff;
+    font-size: 3em;
+    font-family: montserrat, Arial, sans-serif;
+    font-weight: bold;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes blur {
+    0%, 100% { filter: blur(0); }
+    50% { filter: blur(2px); }
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+}
+
+.placeholder-block {
+    /* display: block; */
+    border: 1px solid gray;
+    background: #ffffff;
+    color: #000000;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#row-head {
+    height: 40vh;
+}
+
+h3 {
+    font-family: "Montserrat", sans-serif;
+}

@@ -1,0 +1,28 @@
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import 'color';
+@import 'fonts';
+
+$fa-font-display: swap;
+$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+
+:root {
+  // Sidebar
+  --sidenav-base-width: 250px;
+  --sidenav-collapsed-width: 55px;
+  --navbar-base-height: 56px;
+  --navbar-base-web-height: 40px;
+}
+
+$link-decoration: none;
+
+/* Screen Size */
+$screen-xs-max: 767px;
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
+/* Font size */
+$fontSizeMobile: 13px;
+$fontSizeTablet: 14px;
+$fontSizeLaptop: 15px;

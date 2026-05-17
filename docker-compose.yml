@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: checkin_v3_pgsql_test
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: checkin_v3_db_test
+      POSTGRES_USER: checkin_v3_test_user
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -1,0 +1,264 @@
+
+.dt-search {
+    // text-align: right;
+
+    #dt-search-0 {
+        width: 20% !important; /* Make it full width */
+        padding: 0.375rem 0.75rem; /* Bootstrap padding */
+        font-size: 1rem;
+        border: 1px solid #ced4da; /* Bootstrap border */
+        border-radius: 0.25rem; /* Bootstrap rounded corners */
+        outline: none;
+    }
+
+    #dt-search-0:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+}
+
+.dt-length {
+    #dt-length-0 {
+        margin: 0 5px 0 0;
+    }
+}
+
+.dt-info {
+    margin: 5px 0;
+}
+
+.dt-paging {
+    nav {
+        text-align: center;
+
+        .dt-paging-button {
+            border: 1px solid #999;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 0px 2px;
+            &:hover {
+                color: $mainmenu-bg-hover;
+            }
+        }
+    }
+}
+
+/* Mobile-first approach */
+@media (max-width: $screen-xs-max) {
+    table.dataTable {
+        thead {
+            th {
+                .dt-column-title{
+                    font-size: $fontSizeMobile !important;
+                }
+            }
+        }
+        tbody {
+            tr {
+                font-size: $fontSizeMobile !important;
+            }
+        }
+    }
+    .dt-search {
+        #dt-search-0 {
+            width: 100% !important; /* Make it full width */
+        }
+    }
+}
+
+/* Tablets (768px and up) */
+@media (min-width: $screen-sm-min) {
+    table.dataTable {
+        thead {
+            th {
+                .dt-column-title{
+                    font-size: $fontSizeTablet !important;
+                }
+            }
+        }
+        tbody {
+            tr {
+                font-size: $fontSizeTablet !important;
+            }
+        }
+    }
+    .dt-search {
+        #dt-search-0 {
+            width: 100% !important; /* Make it full width */
+        }
+    }
+}
+
+/* Small Laptops (992px and up) (Macbook Pro) */
+@media (min-width: $screen-md-min) {
+    table.dataTable {
+        thead {
+            th {
+                .dt-column-title{
+                    font-size: $fontSizeLaptop !important;
+                }
+            }
+        }
+        tbody {
+            tr {
+                font-size: $fontSizeLaptop !important;
+            }
+        }
+    }
+    .dt-search {
+        #dt-search-0 {
+            width: 30% !important; /* Make it full width */
+        }
+    }
+}
+
+/* Desktops (1200px and up) */
+@media (min-width: $screen-lg-min) {
+    table.dataTable {
+        thead {
+            th {
+                .dt-column-title{
+                    font-size: $fontSizeLaptop !important;
+                }
+            }
+        }
+        tbody {
+            tr {
+                font-size: $fontSizeLaptop !important;
+            }
+        }
+    }
+    .dt-search {
+        #dt-search-0 {
+            width: 30% !important; /* Make it full width */
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .dataTables_wrapper {
+        margin-top:15px;
+
+        input[type=search] {
+            border: 1px solid #dee2e6;
+            padding-left:10px;
+            border-radius: 5px;
+            height:40px;
+            width:300px !important;
+            margin-right:15px;
+
+            &::placeholder {
+                font-size:12px;
+            }
+            &:focus-visible {
+                display: inline-block;
+            }
+        }
+
+        .dt-buttons {
+            padding-left:15px;
+            .buttons-print {
+                border: 1px solid #999;
+                border-radius:5px;
+                padding:5px 10px;
+                &:hover {
+                    color: $primary-color;
+                }
+            }
+
+        }
+
+        .dataTable {
+            thead {
+                tr {
+                    th {
+                        font-size:11px;
+                        background-color: #f5f6f6;
+                        border-bottom:0;
+                        padding-top:15px;
+                        padding-bottom:15px;
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    &:hover {
+                        background-color: #f6f9fc;
+                    }
+                    td {
+                        color: #525f7f;
+                        font-size:13px;
+                        a {
+                            color: #525f7f;
+                            font-size:13px;
+
+                            &:hover {
+                                color:$primary-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .dataTables_length {
+            text-align: right;
+            padding-right:15px;
+            label {
+                font-size:12px;
+            }
+        }
+        .dataTables_info {
+            text-align: right;
+            padding-right:15px;
+            padding-top:0px !important;
+            font-size:12px;
+        }
+        .dataTables_paginate {
+            padding-top:35px;
+            padding-bottom:15px;
+            padding-right:15px;
+            a {
+                color:#8898aa;
+                font-size:13px;
+
+                &:hover {
+                    color: $primary-color;
+                    cursor: pointer;
+                }
+            }
+            a.current {
+                position: relative;
+                top:-13px;
+                color: #fff;
+                text-align: center;
+                display:inline-block;
+                background-color: $primary-color;
+                border-color: $primary-color;
+                padding: 0;
+                margin: 0 3px;
+                border-radius: 50%!important;
+                width: 25px;
+                height: 25px;
+                font-size: 14px !important;
+            }
+            a.previous {
+                padding-right:15px;
+                position: relative;
+                top:-12px;
+            }
+            a.next {
+                padding-left:15px;
+                position: relative;
+                top:-12px;
+            }
+        }
+    }
+}
+
+tr[data-href] {
+    cursor: pointer;
+}
+
+tr[data-href]:hover {
+    background-color: #f5f5f5 !important; /* Light gray background on hover */
+}

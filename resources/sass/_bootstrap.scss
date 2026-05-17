@@ -1,0 +1,59 @@
+.btn-xs {
+    font-size: 10px !important;
+    padding: 4px;
+}
+
+.text-xs {
+    font-size: 0.7rem;
+}
+
+.text-sm {
+    font-size: 1rem*.875;
+}
+
+.text-lg {
+    font-size: 1rem*1.25;
+}
+
+.modal-lg {
+    width: 800px !important;
+}
+
+.modal-xl {
+    width: 1140px !important;
+}
+
+.callout {
+    padding: 20px;
+    margin: 5px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+    code {
+        border-radius: 3px;
+    }
+    &+.bs-callout {
+        margin-top: -5px;
+    }
+}
+
+@each $name, $color in (default, #777), (primary, #428bca), (success, #5cb85c), (danger, #d9534f), (warning, #f0ad4e), (info, #5bc0de), (bdc, #29527a) {
+    .callout-#{$name} {
+        border-left-color: $color;
+        h1, h2, h3, h4, h5, h6 {
+            color: $color;
+        }
+    }
+}
+
+.modal-dialog-scrollable .modal-body {
+    max-height: calc(100vh - 200px); /* Adjust depending on your modal header/footer height */
+    overflow-y: auto;
+}

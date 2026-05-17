@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delfi Check-in • PDA Scanner v.1.1</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      /* slate-900 */
+      --panel: #111827;
+      /* gray-900 */
+      --muted: #1f2937;
+      /* gray-800 */
+      --text: #e5e7eb;
+      /* gray-200 */
+      --sub: #9ca3af;
+      /* gray-400 */
+      --acc: #22c55e;
+      /* green-500 */
+      --warn: #f59e0b;
+      /* amber-500 */
+      --err: #ef4444;
+      /* red-500 */
+      --blue: #3b82f6;
+      /* blue-500 */
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px
+    }
+
+    header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .title {
+      display: flex;
+      gap: 12px;
+      align-items: center
+    }
+
+    .badge {
+      background: var(--muted);
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: var(--sub);
+      font-size: 12px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px
+    }
+
+    @media(min-width:960px) {
+      .grid {
+        grid-template-columns: 360px 1fr
+      }
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #1f2937;
+      border-radius: 14px
+    }
+
+    .card h3 {
+      margin: 0 0 8px 0;
+      font-size: 16px
+    }
+
+    .card .body {
+      padding: 14px
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .row.wrap {
+      flex-wrap: wrap
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="password"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      background: #0b1220;
+      color: var(--text);
+      outline: none
+    }
+
+    textarea {
+      min-height: 84px;
+      resize: vertical
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid #334155;
+      background: #0b1220;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer
+    }
+
+    .btn.primary {
+      background: var(--blue);
+      border-color: transparent;
+      color: white
+    }
+
+    .btn.success {
+      background: var(--acc);
+      border-color: transparent;
+      color: #04210f
+    }
+
+    .btn.warn {
+      background: var(--warn);
+      border-color: transparent;
+      color: #1f1302
+    }
+
+    .btn.ghost {
+      background: transparent
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--sub)
+    }
+
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer
+    }
+
+    .switch input {
+      appearance: none;
+      width: 38px;
+      height: 22px;
+      background: #374151;
+      border-radius: 999px;
+      position: relative;
+      outline: none;
+      border: 1px solid #273044
+    }
+
+    .switch input:checked {
+      background: #2563eb
+    }
+
+    .switch input::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      transition: all .2s
+    }
+
+    .switch input:checked::after {
+      left: 18px
+    }
+
+    .helper {
+      font-size: 12px;
+      color: var(--sub)
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px
+    }
+
+    .dot-pending {
+      background: #9ca3af
+    }
+
+    .dot-synced {
+      background: #22c55e
+    }
+
+    .dot-failed {
+      background: #ef4444
+    }
+
+    .table {
+      overflow: auto;
+      border-top: 1px solid #1f2937;
+      border-bottom: 1px solid #1f2937
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #1f2937;
+      text-align: left;
+      font-size: 14px
+    }
+
+    tr:hover {
+      background: #0b1220
+    }
+
+    .sticky-head th {
+      position: sticky;
+      top: 0;
+      background: #0b1220;
+      z-index: 2
+    }
+
+    .kbd {
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-bottom-width: 3px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: #cbd5e1
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace
+    }
+
+    .code {
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 13px
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--sub);
+      font-size: 12px;
+      text-align: center
+    }
+
+    .log {
+      max-width: 53vw;
+      max-height: 200px;
+      overflow: auto;
+      background: #0b1220;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      padding: 8px;
+      font-size: 12px
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid #334155;
+      color: #cbd5e1
+    }
+
+    .ok {
+      color: #22c55e
+    }
+
+    .warn-text {
+      color: #f59e0b
+    }
+
+    .err-text {
+      color: #ef4444
+    }
+
+    /* Camera */
+    #cam-wrap {
+      position: relative;
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px
+    }
+
+    #cam-video {
+      width: 100%;
+      max-height: 260px;
+      background: black;
+      border-radius: 10px
+    }
+
+    #cam-overlay {
+      position: absolute;
+      inset: 10px;
+      pointer-events: none;
+      border: 2px dashed rgba(255, 255, 255, .25);
+      border-radius: 10px
+    }
+
+    /* customize-css */
+    .my-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+
+    .my-table td,
+    .my-table th {
+      /* padding: 8px; */
+      white-space: nowrap;
+      /* keep one line by default */
+    }
+
+    /* ✅ Only affect mobile/tablet view */
+    @media (max-width: 768px) {
+
+      /* make only the first column wrap text */
+      .my-table td:nth-child(2),
+      .my-table th:nth-child(2) {
+        max-width: 120px;
+        /* adjust as needed */
+        white-space: normal !important;
+        /* allow wrapping */
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+    }
+
+    /* --- Mobile stacked list for "Danh sách mã đã quét" --- */
+    @media (max-width: 768px) {
+      .my-table thead {
+        display: none;
+      }
+
+      .my-table tr {
+        display: block;
+      }
+
+      .my-table td,
+      .my-table th {
+        display: block;
+        white-space: normal !important;
+        border: none;
+        padding: 0;
+      }
+
+      .mobile-cell {
+        padding: 10px;
+        border-bottom: 1px solid #1f2937;
+      }
+
+      .mheader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .mindex {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 28px;
+        height: 22px;
+        border-radius: 999px;
+        padding: 0 8px;
+        font-size: 12px;
+        background: #0b1220;
+        border: 1px solid #334155;
+        color: #cbd5e1;
+      }
+
+      .mstatus {
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .mcode {
+        font-weight: 600;
+        margin-bottom: 4px;
+        word-break: break-word;
+      }
+
+      .mmeta {
+        font-size: 12px;
+        color: var(--sub);
+        margin-bottom: 6px;
+      }
+
+      .mactions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7Z" stroke="#22c55e"
+            stroke-width="1.5" />
+          <path d="M7 7h10v3H7zM7 14h10v3H7z" stroke="#9ca3af" stroke-width="1.2" />
+        </svg>
+        <div>
+          <div style="font-weight:700;font-size:18px">Delfi Check‑in • PDA Scanner</div>
+          <div class="helper">Quét mã bằng PDA (Keyboard/Clipboard/Camera), lưu tạm cục bộ và đồng bộ qua API</div>
+        </div>
+      </div>
+      <div class="badge" id="device-pill">Thiết bị: <span id="device-id"></span></div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Controls / Settings -->
+      <section class="card">
+        <div class="body">
+          <h3>1) Chế độ quét</h3>
+          <div class="row wrap" style="gap:10px;margin-bottom:8px">
+            <label class="pill"><input type="radio" name="mode" id="mode-keyboard" checked> <span>Keyboard
+                Wedge</span></label>
+            <label class="pill"><input type="radio" name="mode" id="mode-clipboard"> <span>Clipboard</span></label>
+            <label class="pill"><input type="radio" name="mode" id="mode-camera"> <span>Camera</span></label>
+            <span class="helper">Chọn cách đưa dữ liệu vào ứng dụng.</span>
+          </div>
+
+          <div id="kb-settings" class="card" style="background:#0b1220;margin-bottom:10px">
+            <div class="body">
+              <div class="row wrap">
+                <div style="flex:1">
+                  <label class="helper">Ký tự kết thúc từ PDA</label>
+                  <select id="suffix">
+                    <option value="enter">Enter</option>
+                    <option value="tab">Tab</option>
+                    <option value="none">Không có (tự nhận dạng theo thời gian)</option>
+                  </select>
+                </div>
+                <div style="flex:1">
+                  <label class="helper">Timeout (ms) khi suffix = Không có</label>
+                  <input type="text" id="timeout" value="200" class="mono" />
+                </div>
+              </div>
+              <div style="margin-top:10px">
+                <button class="btn success" id="btn-start">Bắt đầu lắng nghe</button>
+                <button class="btn" id="btn-stop" disabled>Dừng</button>
+                <div class="helper" style="margin-top:10px">Trường nhập liệu luôn được giữ focus.</div>
+              </div>
+              <div style="margin-top:10px">
+                <input id="scan-input" type="text" placeholder="Đưa con trỏ vào đây và quét…" autocomplete="off"
+                  autocorrect="off" autocapitalize="off" spellcheck="false" class="mono" inputmode="none"
+                  virtualkeyboardpolicy="manual" />
+                <div class="helper" style="margin-top:10px">Mẹo: cấu hình PDA gửi <span class="kbd">Enter</span> sau mỗi
+                  lần quét để ổn định
+                  nhất.</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="cb-settings" class="card" style="background:#0b1220;display:none;margin-bottom:10px">
+            <div class="body">
+              <div class="row wrap">
+                <div style="flex:1">
+                  <label class="helper">Phím nóng dán Clipboard</label>
+                  <select id="paste-key">
+                    <option value="F9">F9</option>
+                    <option value="F8">F8</option>
+                    <option value="F7">F7</option>
+                  </select>
+                  <div class="helper">Nhấn phím này để ứng dụng đọc <span class="kbd">navigator.clipboard</span> (cần
+                    cấp quyền).</div>
+                </div>
+                <div style="flex:1">
+                  <label class="helper">Tách dòng theo</label>
+                  <select id="split-mode">
+                    <option value="auto">Tự động (\n, ;, ,)</option>
+                    <option value="newline">Dấu xuống dòng</option>
+                    <option value="comma">Dấu phẩy</option>
+                    <option value="semicolon">Dấu chấm phẩy</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-top:10px" class="row wrap">
+                <button class="btn" id="btn-read-clipboard">Dán từ Clipboard</button>
+                <span class="helper">Hoặc dùng phím nóng đã chọn.</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="cam-settings" class="card" style="background:#0b1220;display:none;margin-bottom:10px">
+            <div class="body">
+              <div class="row wrap">
+                <div style="flex:1">
+                  <label class="helper">Nguồn camera</label>
+                  <select id="cam-device"></select>
+                </div>
+                <div style="flex:1">
+                  <label class="helper">Ghi chú hỗ trợ</label>
+                  <div id="cam-note" class="helper">Chuẩn BarcodeDetector khả dụng trên Chrome/Edge/Android tương đối
+                    mới.</div>
+                </div>
+              </div>
+              <div id="cam-wrap" style="margin-top:10px">
+                <video id="cam-video" playsinline muted></video>
+                <div id="cam-overlay"></div>
+              </div>
+              <div class="row wrap" style="margin-top:10px">
+                <button class="btn success" id="btn-cam-start">Bắt đầu quét camera</button>
+                <button class="btn" id="btn-cam-stop" disabled>Dừng</button>
+                <span class="helper">Tự động chặn mã trùng ngắn hạn để tránh thêm lặp.</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>2) Tuỳ chọn</h3>
+          <div class="row wrap" style="gap:12px">
+            <label class="switch"><input type="checkbox" id="no-dup" checked><span>Chặn trùng</span></label>
+            <label class="switch"><input type="checkbox" id="vibrate" checked><span>Rung khi quét</span></label>
+            <label class="switch"><input type="checkbox" id="beep" checked><span>Beep khi quét</span></label>
+            <label class="switch"><input type="checkbox" id="suppress-vk" checked><span>Chặn bàn phím ảo</span></label>
+            <label class="switch"><input type="checkbox" id="autosync"><span>Tự đồng bộ ngay khi quét</span></label>
+          </div>
+        <div class="helper" style="margin-top:6px">Nếu vẫn hiện bàn phím: vào Cài đặt PDA → Bàn phím vật lý → tắt tuỳ
+          chọn “Hiển thị bàn phím ảo khi có bàn phím vật lý”.</div>
+
+          <div style="margin-top:12px">
+            <h3>3) Đồng bộ dữ liệu từ API</h3>
+            <div class="row wrap">
+              <input type="url" id="api-import-url" placeholder="https://api.example.com/products" />
+            </div>
+
+            <div class="row wrap" style="margin-top:8px">
+              <label class="helper">Headers JSON (tùy chọn)</label>
+              <textarea id="api-import-headers" class="mono" placeholder='{"Authorization": "Bearer ..."}'></textarea>
+            </div>
+
+            <div class="row wrap" style="margin-top:8px">
+              <label class="helper">Request payload (nếu API yêu cầu)</label>
+              <textarea id="api-import-body" class="mono" placeholder='{"shop_id": 123}'></textarea>
+            </div>
+
+            <div class="row wrap" style="margin-top:8px">
+              <label class="helper">Đường dẫn dữ liệu trong response (ví dụ: data.items hoặc data)</label>
+              <input type="text" id="api-import-data-path" class="mono" placeholder="data" />
+              <div class="helper" style="margin-top:4px">Để trống hoặc nhập "data" nếu dữ liệu ở response.data. Nhập "data.items" nếu dữ liệu ở response.data.items</div>
+            </div>
+
+            <div class="row wrap" style="margin-top:10px">
+              <button class="btn" id="btn-import-test">Thử API</button>
+              <button class="btn primary" id="btn-import-sync">Tải dữ liệu & lưu offline</button>
+            </div>
+
+          </div>
+
+          <div style="margin-top:12px">
+            <h3>4) Cấu hình API</h3>
+            <div class="row wrap">
+              <input type="url" id="api-url" placeholder="https://api.example.com/checkin/batch" />
+            </div>
+            <div class="row wrap" style="margin-top:8px">
+              <select id="api-method" style="max-width:140px">
+                <option>POST</option>
+                <option>PUT</option>
+                <option>PATCH</option>
+              </select>
+              <input type="text" id="api-token" placeholder="Bearer <token> (tuỳ chọn)" />
+            </div>
+            <div style="margin-top:8px">
+              <label class="helper">Payload (chỉnh nếu backend yêu cầu cấu trúc khác)</label>
+              <textarea id="payload-template" rows="20" class="mono">{
+  "device_id": "{{deviceId}}",
+  "batch_id": "{{batchId}}",
+  "items": [
+    {{#each items}}
+    {"code": "{{code}}", 
+    "scanned_at": "{{ts}}"}{{#unless @last}},
+    {{/unless}}
+    {{/each}}
+  ]
+}</textarea>
+              <div class="helper">Biến: <span class="tag">{{deviceId}}</span> <span class="tag">{{batchId}}</span> <span
+                  class="tag">{{#each items}}…{{/each}}</span> <span class="tag">{{code}}</span> <span
+                  class="tag">{{ts}}</span></div>
+            </div>
+            <div class="row wrap" style="margin-top:10px">
+              <button class="btn" id="btn-test-api">Thử gọi API (không gửi dữ liệu thật)</button>
+              <button class="btn primary" id="btn-sync">Đồng bộ danh sách</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <h3>Xuất / Nhập</h3>
+            <div class="row wrap">
+              <button class="btn" id="btn-export-csv">Xuất CSV</button>
+              <button class="btn" id="btn-export-json">Xuất JSON</button>
+              <input type="file" id="import-file" accept=".json,.csv" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="row wrap">
+            <button class="btn warn" id="btn-clear">Xoá tất cả (local)</button>
+            <div id="counts" class="helper"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: List / Logs -->
+      <section class="card">
+        <div class="body">
+          <h3>Danh sách mã đã quét</h3>
+          <div class="table">
+            <table id="table" class="table my-table">
+              <thead class="sticky-head">
+                <tr>
+                  <th>#</th>
+                  <th>Mã</th>
+                  <th>Nguồn</th>
+                  <th>Thời gian</th>
+                  <th>Trạng thái</th>
+                  <th style="width:110px">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+
+          <div style="margin-top:12px">
+            <h3>Nhật ký</h3>
+            <div class="row wrap" style="margin-bottom:8px">
+              <button class="btn" id="btn-selftest">Tự kiểm tra (Self‑test)</button>
+            </div>
+            <div id="log" class="log"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">Made for PDA scanners • Hoạt động offline (LocalStorage) • Không cần cài app</div>
+  </div>
+
+  <script>
+    (function () {
+      // ===== Utilities =====
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+      function log(msg, level = 'info') {
+        const box = $('#log');
+        const el = document.createElement('div');
+        const t = new Date().toLocaleTimeString();
+        el.innerHTML = `<span class="sub" style="font-weight: bold;">[${t}]</span> ${msg}`;
+        if (level === 'error') el.classList.add('err-text');
+        if (level === 'warn') el.classList.add('warn-text');
+        box && box.prepend(el);
+      }
+      function uid() { return Math.random().toString(36).slice(2) + Date.now().toString(36) }
+      function nowISO() { return new Date().toISOString() }
+
+      function beep() {
+        const b = $('#beep');
+        if (!b || !b.checked) return;
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.connect(g); g.connect(ctx.destination);
+          o.type = 'square'; o.frequency.setValueAtTime(880, ctx.currentTime);
+          g.gain.setValueAtTime(0.05, ctx.currentTime);
+          o.start(); setTimeout(() => { o.stop(); ctx.close(); }, 100);
+        } catch (e) { }
+      }
+      function vibrate() {
+        const v = $('#vibrate');
+        if (navigator.vibrate && v && v.checked) navigator.vibrate(50)
+      }
+
+      // ===== Storage (LocalStorage) =====
+      const LS_KEY = 'pda_scans_v1';
+      const LS_CFG = 'pda_cfg_v1';
+      const LS_PRODUCTS = 'pda_datas_v1';
+      function loadScans() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]') } catch { return [] } }
+      function saveScans(arr) { localStorage.setItem(LS_KEY, JSON.stringify(arr)) }
+      function loadCfg() { try { return JSON.parse(localStorage.getItem(LS_CFG) || '{}') } catch { return {} } }
+      function saveCfg(cfg) { localStorage.setItem(LS_CFG, JSON.stringify(cfg)) }
+
+      // ===== App State =====
+      const state = {
+        deviceId: localStorage.getItem('device_id') || `web-${uid().slice(0, 6)}`,
+        listening: false,
+        buffer: '',
+        lastKeyAt: 0,
+        timer: null,
+        scans: loadScans(),
+        batchId: uid().slice(0, 8),
+        cfg: Object.assign({
+          apiImportUrl: '',
+          apiImportHeaders: '{}',
+          apiImportBody: '{}',
+          apiImportDataPath: 'data',
+          mode: 'keyboard', suffix: 'enter', timeout: 200,
+          pasteKey: 'F9', split: 'auto', noDup: true, vibrate: true, beep: true, suppressVK: true, autosync: false,
+          apiUrl: '', apiMethod: 'POST', apiToken: '',
+          payload: `{
+  "device_id": "{{deviceId}}",
+  "batch_id": "{{batchId}}",
+  "items": [
+    {{#each items}}
+    {"code": "{{code}}", "scanned_at": "{{ts}}"}{{#unless @last}},{{/unless}}
+    {{/each}}
+  ]
+}`
+        }, loadCfg())
+      };
+      localStorage.setItem('device_id', state.deviceId);
+
+      // ===== UI Helpers =====
+      function bindVKGuards() {
+        const i = $('#scan-input'); if (!i) return;
+        if (i.__vkBound) return; // bind once
+        const guard = (e) => { if (state.cfg.suppressVK) { e.preventDefault(); try { navigator.virtualKeyboard && navigator.virtualKeyboard.hide && navigator.virtualKeyboard.hide(); } catch { } } };
+        i.addEventListener('touchstart', guard, { passive: false });
+        i.addEventListener('mousedown', guard);
+        i.addEventListener('focus', () => { if (state.cfg.suppressVK) { try { navigator.virtualKeyboard && navigator.virtualKeyboard.hide && navigator.virtualKeyboard.hide(); } catch { } } });
+        i.__vkBound = true;
+      }
+
+      function applyVKSuppression() {
+        const i = $('#scan-input'); if (!i) return;
+        bindVKGuards();
+        if (state.cfg.suppressVK) {
+          i.readOnly = true;
+          i.setAttribute('inputmode', 'none');
+          i.setAttribute('virtualkeyboardpolicy', 'manual');
+          try { if (navigator.virtualKeyboard && typeof navigator.virtualKeyboard.hide === 'function') navigator.virtualKeyboard.hide(); } catch (e) { }
+        } else {
+          i.readOnly = false;
+          i.setAttribute('inputmode', 'text');
+          i.setAttribute('virtualkeyboardpolicy', 'auto');
+        }
+      }
+
+      function syncCfgToUI() {
+        const mk = $('#mode-keyboard'), mc = $('#mode-clipboard'), mcam = $('#mode-camera');
+        if (mk) mk.checked = state.cfg.mode === 'keyboard';
+        if (mc) mc.checked = state.cfg.mode === 'clipboard';
+        if (mcam) mcam.checked = state.cfg.mode === 'camera';
+        const kb = $('#kb-settings'), cb = $('#cb-settings'), cam = $('#cam-settings');
+        if (kb) kb.style.display = state.cfg.mode === 'keyboard' ? 'block' : 'none';
+        if (cb) cb.style.display = state.cfg.mode === 'clipboard' ? 'block' : 'none';
+        if (cam) cam.style.display = state.cfg.mode === 'camera' ? 'block' : 'none';
+        const sfx = $('#suffix'); if (sfx) sfx.value = state.cfg.suffix;
+        const to = $('#timeout'); if (to) to.value = state.cfg.timeout;
+        const pk = $('#paste-key'); if (pk) pk.value = state.cfg.pasteKey;
+        const sp = $('#split-mode'); if (sp) sp.value = state.cfg.split;
+        const nd = $('#no-dup'); if (nd) nd.checked = !!state.cfg.noDup;
+        const vib = $('#vibrate'); if (vib) vib.checked = !!state.cfg.vibrate;
+        const bp = $('#beep'); if (bp) bp.checked = !!state.cfg.beep;
+        const svk = $('#suppress-vk'); if (svk) svk.checked = !!state.cfg.suppressVK;
+        const as = $('#autosync'); if (as) as.checked = !!state.cfg.autosync;
+        const au = $('#api-url'); if (au) au.value = state.cfg.apiUrl;
+        const am = $('#api-method'); if (am) am.value = state.cfg.apiMethod;
+        const at = $('#api-token'); if (at) at.value = state.cfg.apiToken;
+        const pt = $('#payload-template'); if (pt) pt.value = state.cfg.payload;
+        const iu = $('#api-import-url'); if (iu) iu.value = state.cfg.apiImportUrl || '';
+        const ih = $('#api-import-headers'); if (ih) ih.value = state.cfg.apiImportHeaders || '{}';
+        const ib = $('#api-import-body'); if (ib) ib.value = state.cfg.apiImportBody || '{}';
+        const idp = $('#api-import-data-path'); if (idp) idp.value = state.cfg.apiImportDataPath || 'data';
+        applyVKSuppression();
+      }
+
+      function readUIToCfg() {
+        const modeCam = $('#mode-camera')?.checked;
+        const modeClipboard = $('#mode-clipboard')?.checked;
+        state.cfg.mode = modeCam ? 'camera' : (modeClipboard ? 'clipboard' : 'keyboard');
+        const sfx = $('#suffix'); if (sfx) state.cfg.suffix = sfx.value;
+        const to = $('#timeout'); if (to) state.cfg.timeout = parseInt(to.value || '200', 10);
+        const pk = $('#paste-key'); if (pk) state.cfg.pasteKey = pk.value;
+        const sp = $('#split-mode'); if (sp) state.cfg.split = sp.value;
+        const nd = $('#no-dup'); if (nd) state.cfg.noDup = nd.checked;
+        const vib = $('#vibrate'); if (vib) state.cfg.vibrate = vib.checked;
+        const bp = $('#beep'); if (bp) state.cfg.beep = bp.checked;
+        const svk = $('#suppress-vk'); if (svk) state.cfg.suppressVK = svk.checked;
+        const as = $('#autosync'); if (as) state.cfg.autosync = as.checked;
+        const au = $('#api-url'); if (au) state.cfg.apiUrl = au.value.trim();
+        const am = $('#api-method'); if (am) state.cfg.apiMethod = am.value;
+        const at = $('#api-token'); if (at) state.cfg.apiToken = at.value.trim();
+        const pt = $('#payload-template'); if (pt) state.cfg.payload = pt.value;
+        const iu = $('#api-import-url'); if (iu) state.cfg.apiImportUrl = iu.value.trim();
+        const ih = $('#api-import-headers'); if (ih) state.cfg.apiImportHeaders = ih.value.trim();
+        const ib = $('#api-import-body'); if (ib) state.cfg.apiImportBody = ib.value.trim();
+        const idp = $('#api-import-data-path'); if (idp) state.cfg.apiImportDataPath = idp.value.trim() || 'data';
+        saveCfg(state.cfg);
+        syncCfgToUI();
+      }
+
+      // auto-bind common inputs to config
+      ['#suffix', '#timeout', '#paste-key', '#split-mode', '#no-dup', '#vibrate', '#beep', '#suppress-vk', '#autosync', '#api-url', '#api-method', '#api-token', '#payload-template', '#api-import-url', '#api-import-headers', '#api-import-body', '#api-import-data-path']
+        .forEach(sel => {
+          const el = $(sel); if (!el) return;
+          el.addEventListener('change', readUIToCfg);
+          if (sel === "#payload-template" || sel === "#api-import-headers" || sel === "#api-import-body") el.addEventListener('input', readUIToCfg);
+        });
+
+      // ===== Table/UI =====
+      function refreshCounts() {
+        const total = state.scans.length;
+        const synced = state.scans.filter(x => x.synced === true).length;
+        const failed = state.scans.filter(x => x.synced === false && x.error).length;
+        const c = $('#counts'); if (c) c.textContent = `Tổng: ${total} • Đã đồng bộ: ${synced} • Lỗi: ${failed}`;
+      }
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, function (m) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]);
+        });
+      }
+      function isMobile() { return window.matchMedia('(max-width: 768px)').matches; }
+
+      function renderTable() {
+        const tbody = $('#tbody'); if (!tbody) return;
+        tbody.innerHTML = '';
+        const mobile = isMobile();
+        const scans = state.scans.slice().reverse();
+        scans.forEach((s, idx) => {
+          const tr = document.createElement('tr');
+          const st = s.synced === true
+            ? `<span class="status-dot dot-synced"></span>Đã đồng bộ`
+            : (s.error ? `<span class="status-dot dot-failed"></span>Lỗi`
+              : `<span class="status-dot dot-pending"></span>Chờ đồng bộ`);
+          const index = state.scans.length - idx;
+          if (mobile) {
+            tr.innerHTML = `
+              <td colspan="6" class="mobile-cell">\n                <div class="mheader">\n                  <span class="mindex">#${index}</span>\n                  <span class="mstatus">${st}</span>\n                </div>\n                <div class="mcode mono">${escapeHtml(s.code)}</div>\n                <div class="mmeta"><span class="tag">${s.source}</span> • ${new Date(s.ts).toLocaleString()}</div>\n                <div class="mactions">\n                  <button class="btn" data-act="resync" data-id="${s.id}">Gửi lại</button>\n                  <button class="btn" data-act="del" data-id="${s.id}">Xoá</button>\n                </div>\n              </td>  </td>`;
+          } else {
+            tr.innerHTML = `
+              <td>${index}</td>
+              <td class="mono">${escapeHtml(s.code)}</td>
+              <td><span class="tag">${s.source}</span></td>
+              <td>${new Date(s.ts).toLocaleString()}</td>
+              <td>${st}</td>
+              <td>
+                <button class="btn" data-act="resync" data-id="${s.id}">Gửi lại</button>
+                <button class="btn" data-act="del" data-id="${s.id}">Xoá</button>
+              </td>`;
+          }
+          tbody.appendChild(tr);
+        });
+        refreshCounts();
+      }
+
+
+      // ===== Row actions: delete / resync (event delegation) =====
+      const tbodyEl = $('#tbody');
+      if (tbodyEl) tbodyEl.addEventListener('click', (e) => {
+        let el = e.target;
+        while (el && el !== tbodyEl && el.tagName !== 'BUTTON') el = el.parentElement;
+        if (!el || el.tagName !== 'BUTTON') return;
+        const id = el.getAttribute('data-id');
+        const act = el.getAttribute('data-act');
+        if (!id || !act) return;
+        if (act === 'del') {
+          const before = state.scans.length;
+          state.scans = state.scans.filter(x => x.id !== id);
+          saveScans(state.scans);
+          renderTable();
+          log(`Đã xoá mã có id=${id}. Còn lại ${state.scans.length}/${before}.`, 'warn');
+          return;
+        }
+        if (act === 'resync') {
+          const item = state.scans.find(x => x.id === id);
+          if (!item) { log('Không tìm thấy item để gửi lại.', 'error'); return; }
+          syncItems([item]);
+          return;
+        }
+      });
+
+      // ===== Scan Flow =====
+      async function addScan(code, source) {
+        code = (code || '').trim();
+        
+        if (!code) return;
+
+        if (!["DUP-001", "DEL-001"].includes(code)) {
+          let element = await getProductFromIndexedDB(code);
+          if (element === null || element === undefined) {
+            log(`Không tìm thấy mã: <span class="mono">${escapeHtml(code)}</span>`, 'warn');
+            return;
+          }
+        }
+
+
+        if (state.cfg.noDup && state.scans.some(x => x.code === code)) {
+          beep(); 
+          vibrate();
+          log(`Bỏ qua mã trùng: <span class="mono">${escapeHtml(code)}</span>`, 'warn');
+          return;
+        }
+        
+        const item = { id: uid(), code, ts: nowISO(), source, synced: false, tries: 0, error: null };
+        state.scans.push(item); 
+        saveScans(state.scans); 
+        renderTable();
+        beep(); 
+        vibrate();
+        log(`+ Thêm mã <b class="mono">${escapeHtml(code)}</b> từ <i>${source}</i>`);
+        if (state.cfg.autosync) syncItems([item]);
+      }
+
+      // ===== Keyboard mode =====
+      const input = $('#scan-input');
+      function ensureFocus() { if (state.listening && input) { input.focus({ preventScroll: true }); const len = input.value.length; input.setSelectionRange(len, len); } }
+      if (input) { input.addEventListener('blur', () => setTimeout(ensureFocus, 50)); }
+
+      function startListen() { state.listening = true; const bs = $('#btn-start'), bt = $('#btn-stop'); if (bs) bs.disabled = true; if (bt) bt.disabled = false; ensureFocus(); log('Bắt đầu lắng nghe (Keyboard mode)') }
+      function stopListen() { state.listening = false; const bs = $('#btn-start'), bt = $('#btn-stop'); if (bs) bs.disabled = false; if (bt) bt.disabled = true; log('Dừng lắng nghe') }
+
+      const btnStart = $('#btn-start'), btnStop = $('#btn-stop');
+      if (btnStart) btnStart.addEventListener('click', startListen);
+      if (btnStop) btnStop.addEventListener('click', stopListen);
+
+      if (input) {
+        input.addEventListener('keydown', (e) => {
+          if (!state.listening) return;
+          if (state.cfg.suppressVK) {
+            const finalize = () => { const code = state.buffer; state.buffer = ''; if (code) addScan(code, 'keyboard'); };
+            if (state.cfg.suffix === 'enter' && e.key === 'Enter') { e.preventDefault(); finalize(); return; }
+            if (state.cfg.suffix === 'tab' && e.key === 'Tab') { e.preventDefault(); finalize(); return; }
+            if (state.cfg.suffix === 'none') {
+              state.lastKeyAt = Date.now();
+              clearTimeout(state.timer);
+              state.timer = setTimeout(finalize, Math.max(80, state.cfg.timeout || 200));
+            }
+            if (e.key.length === 1) { state.buffer += e.key; e.preventDefault(); return; }
+            if (e.key === 'Backspace') { state.buffer = state.buffer.slice(0, -1); e.preventDefault(); return; }
+            return; // ignore other keys
+          }
+          // not suppressing VK: use input.value
+          if (state.cfg.suffix === 'enter' && e.key === 'Enter') {
+            e.preventDefault(); const code = input.value; input.value = ''; addScan(code, 'keyboard'); return;
+          }
+          if (state.cfg.suffix === 'tab' && e.key === 'Tab') {
+            e.preventDefault(); const code = input.value; input.value = ''; addScan(code, 'keyboard'); return;
+          }
+          if (state.cfg.suffix === 'none') {
+            state.lastKeyAt = Date.now();
+            clearTimeout(state.timer);
+            state.timer = setTimeout(() => {
+              const code = input.value; input.value = ''; if (code) addScan(code, 'keyboard');
+            }, Math.max(80, state.cfg.timeout || 200));
+          }
+        });
+      }
+
+      // ===== Clipboard mode =====
+      async function readClipboardOnce() {
+        try {
+          const txt = await navigator.clipboard.readText();
+          const parts = splitCodes(txt);
+          if (parts.length === 0) { log('Clipboard rỗng.', 'warn'); return }
+          parts.forEach(p => addScan(p, 'clipboard'));
+        } catch (err) {
+          log('Không thể đọc clipboard. Trình duyệt yêu cầu quyền hoặc thao tác người dùng.', 'error');
+        }
+      }
+      const btnRead = $('#btn-read-clipboard'); if (btnRead) btnRead.addEventListener('click', readClipboardOnce);
+
+      function splitCodes(txt) {
+        txt = (txt || '').trim();
+        if (!txt) return [];
+        const mode = state.cfg.split;
+        if (mode === 'newline') return txt.split(/\r?\n+/).map(s => s.trim()).filter(Boolean);
+        if (mode === 'comma') return txt.split(',').map(s => s.trim()).filter(Boolean);
+        if (mode === 'semicolon') return txt.split(';').map(s => s.trim()).filter(Boolean);
+        // auto
+        if (/\r?\n/.test(txt)) return txt.split(/\r?\n+/).map(s => s.trim()).filter(Boolean);
+        if (txt.includes(';')) return txt.split(';').map(s => s.trim()).filter(Boolean);
+        if (txt.includes(',')) return txt.split(',').map(s => s.trim()).filter(Boolean);
+        return [txt];
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (state.cfg.mode !== 'clipboard') return;
+        if (e.key === state.cfg.pasteKey) { e.preventDefault(); readClipboardOnce(); }
+      });
+
+      // ===== Camera mode =====
+      let camStream = null; let camRunning = false; let camTickTimer = null; let barcodeDetector = null;
+      const recentCamCodes = new Map(); // code -> lastTs
+      const RECENT_TTL = 1000; // ms
+
+      async function ensureBarcode() {
+        if ('BarcodeDetector' in window) {
+          try {
+            const formats = await BarcodeDetector.getSupportedFormats();
+            barcodeDetector = new BarcodeDetector({ formats });
+            log('BarcodeDetector sẵn sàng.');
+          } catch (err) { barcodeDetector = null; log('BarcodeDetector không khả dụng: ' + err, 'warn'); }
+        } else { barcodeDetector = null; log('Thiết bị không hỗ trợ BarcodeDetector.', 'warn'); }
+      }
+
+      async function listCameras() {
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const cams = devices.filter(d => d.kind === 'videoinput');
+          const sel = $('#cam-device'); if (!sel) return;
+          sel.innerHTML = '';
+          cams.forEach((d, i) => {
+            const opt = document.createElement('option'); opt.value = d.deviceId; opt.textContent = d.label || `Camera ${i + 1}`; sel.appendChild(opt);
+          });
+        } catch (e) { log('Không liệt kê được camera: ' + e, 'warn'); }
+      }
+
+      async function startCamera() {
+        if (camRunning) return;
+        await ensureBarcode();
+        const sel = $('#cam-device');
+        const deviceId = sel && sel.value ? { deviceId: { exact: sel.value } } : { facingMode: { ideal: 'environment' } };
+        try {
+          camStream = await navigator.mediaDevices.getUserMedia({ video: Object.assign({ width: { ideal: 1280 }, height: { ideal: 720 } }, deviceId), audio: false });
+        } catch (err) { log('Không mở được camera: ' + err, 'error'); return; }
+        const v = $('#cam-video'); if (!v) return;
+        v.srcObject = camStream; await v.play(); camRunning = true;
+        $('#btn-cam-start')?.setAttribute('disabled', ''); $('#btn-cam-stop')?.removeAttribute('disabled');
+        if (!barcodeDetector) { log('Thiếu BarcodeDetector, vẫn mở camera nhưng không thể đọc mã.', 'warn'); return; }
+        const tick = async () => {
+          if (!camRunning) { return; }
+          try {
+            if (v.readyState < 2) { camTickTimer = setTimeout(tick, 120); return; }
+            const codes = await barcodeDetector.detect(v);
+            const now = Date.now();
+            for (const c of codes) {
+              const val = c.rawValue || c.raw || c.data || '';
+              if (!val) continue;
+              const last = recentCamCodes.get(val) || 0;
+              if (now - last < RECENT_TTL) continue; // skip recent duplicate
+              recentCamCodes.set(val, now);
+              addScan(val, 'camera');
+            }
+          } catch (err) { /* ignore detect errors while streaming */ }
+          camTickTimer = setTimeout(tick, 150); // throttle to avoid high CPU
+        };
+        tick();
+      }
+
+      function stopCamera() {
+        camRunning = false; if (camTickTimer) { clearTimeout(camTickTimer); camTickTimer = null; }
+        const v = $('#cam-video'); if (v) { v.pause(); v.srcObject = null; }
+        if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+        $('#btn-cam-stop')?.setAttribute('disabled', ''); $('#btn-cam-start')?.removeAttribute('disabled');
+      }
+
+      const btnCamStart = $('#btn-cam-start'); if (btnCamStart) btnCamStart.addEventListener('click', startCamera);
+      const btnCamStop = $('#btn-cam-stop'); if (btnCamStop) btnCamStop.addEventListener('click', stopCamera);
+      const selCam = $('#cam-device'); if (selCam) selCam.addEventListener('change', () => { if (camRunning) { stopCamera(); startCamera(); } });
+
+      // Toggle panels by mode
+      const _mk = $('#mode-keyboard');
+      if (_mk) _mk.addEventListener('change', () => { state.cfg.mode = 'keyboard'; stopCamera(); const kb = $('#kb-settings'); const cb = $('#cb-settings'); const cam = $('#cam-settings'); if (kb) kb.style.display = 'block'; if (cb) cb.style.display = 'none'; if (cam) cam.style.display = 'none'; readUIToCfg(); });
+      const _mc = $('#mode-clipboard');
+      if (_mc) _mc.addEventListener('change', () => { state.cfg.mode = 'clipboard'; stopCamera(); const kb = $('#kb-settings'); const cb = $('#cb-settings'); const cam = $('#cam-settings'); if (kb) kb.style.display = 'none'; if (cb) cb.style.display = 'block'; if (cam) cam.style.display = 'none'; readUIToCfg(); });
+      const _mcam = $('#mode-camera');
+      if (_mcam) _mcam.addEventListener('change', async () => { state.cfg.mode = 'camera'; const kb = $('#kb-settings'); const cb = $('#cb-settings'); const cam = $('#cam-settings'); if (kb) kb.style.display = 'none'; if (cb) cb.style.display = 'none'; if (cam) cam.style.display = 'block'; saveCfg(state.cfg); await listCameras(); });
+
+      // ===== Sync (API) =====
+      function compilePayload(items) {
+        const tpl = state.cfg.payload;
+        const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+        const lines = items.map((it) => `{"code": "${esc(it.code)}", "scanned_at": "${esc(it.ts)}"}`);
+        let out = tpl.replace(/\{\{deviceId\}\}/g, state.deviceId)
+          .replace(/\{\{batchId\}\}/g, state.batchId)
+          .replace(/\{\{#each items\}\}[\s\S]*?\{\{\/each\}\}/g, () => lines.join('\n    '));
+        out = out.replace(/\{\{#unless @last\}\},\{\{\/unless\}\}/g, '');
+        return out;
+      }
+
+      async function callAPI(payload, dryRun = false) {
+        const url = state.cfg.apiUrl; if (!url) { if (dryRun) { log('Chưa đặt API URL — bỏ qua gọi thử.', 'warn'); return { ok: true, dry: true } } throw new Error('Thiếu API URL'); }
+        const headers = { 'Content-Type': 'application/json' };
+        if (state.cfg.apiToken) { headers['Authorization'] = state.cfg.apiToken }
+        const res = await fetch(url, { method: state.cfg.apiMethod || 'POST', headers, body: payload });
+        const text = await res.text();
+        if (!res.ok) { throw new Error(`HTTP ${res.status}: ${text.slice(0, 300)}`) }
+        return { ok: true, text }
+      }
+
+      async function syncItems(items) {
+        if (!items || items.length === 0) { log('Không có mục nào để đồng bộ.', 'warn'); return }
+        const payload = compilePayload(items);
+        try {
+          log(`Đồng bộ ${items.length} mã…`);
+          await callAPI(payload, false);
+          items.forEach(it => { it.synced = true; it.error = null; it.lastSyncAt = nowISO(); it.tries = (it.tries || 0) + 1; });
+          saveScans(state.scans); renderTable();
+          log(`<span class="ok">✓ Thành công</span> (${items.length} mã).`);
+        } catch (err) {
+          items.forEach(it => { it.synced = false; it.error = String(err.message || err); it.lastSyncAt = nowISO(); it.tries = (it.tries || 0) + 1; });
+          saveScans(state.scans); renderTable();
+          log(`<b class="err-text">✗ Lỗi đồng bộ:</b> ${escapeHtml(String(err.message || err))}`, 'error');
+        }
+      }
+
+      const btnSync = $('#btn-sync'); if (btnSync) btnSync.addEventListener('click', () => { const pending = state.scans.filter(x => !x.synced); syncItems(pending); });
+
+      const btnTest = $('#btn-test-api'); if (btnTest) btnTest.addEventListener('click', async () => {
+        try {
+          const payload = compilePayload([{ code: 'TEST-CODE', ts: nowISO() }]);
+          await callAPI(payload, true);
+          log('Đã gọi thử API (không gửi dữ liệu thật). Kiểm tra CORS/Token nếu cần.');
+        } catch (e) { log('Gọi thử thất bại: ' + escapeHtml(String(e.message || e)), 'error') }
+      });
+
+      // ===== Export / Import / Clear =====
+      const btnCsv = $('#btn-export-csv'); if (btnCsv) btnCsv.addEventListener('click', () => {
+        const rows = [['id', 'code', 'ts', 'source', 'synced', 'tries', 'error']].concat(state.scans.map(s => [s.id, s.code, s.ts, s.source, Boolean(s.synced), s.tries || 0, s.error || '']));
+        const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+        download('scans.csv', csv, 'text/csv');
+      });
+      const btnJson = $('#btn-export-json'); if (btnJson) btnJson.addEventListener('click', () => { download('scans.json', JSON.stringify(state.scans, null, 2), 'application/json'); });
+      function download(name, data, type) {
+        const blob = new Blob([data], { type });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = name; a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      }
+
+      const fileInp = $('#import-file'); if (fileInp) fileInp.addEventListener('change', async (e) => {
+        const f = e.target.files[0]; if (!f) return;
+        const text = await f.text();
+        if (f.name.endsWith('.json')) {
+          try {
+            const arr = JSON.parse(text);
+            if (Array.isArray(arr)) {
+              const added = [];
+              arr.forEach(it => {
+                if (it && it.code) {
+                  const item = { id: it.id || uid(), code: String(it.code), ts: it.ts || nowISO(), source: it.source || 'import', synced: !!it.synced, tries: it.tries || 0, error: it.error || null };
+                  state.scans.push(item); added.push(item);
+                }
+              });
+              saveScans(state.scans); renderTable();
+              log(`Nhập JSON: +${added.length} mục.`);
+            }
+          } catch (err) { log('JSON không hợp lệ.', 'error') }
+        } else {
+          const lines = text.split(/\r?\n/).filter(Boolean);
+          const header = lines.shift();
+          const idx = {};
+          header.replace(/\s*/g, '').split(',').forEach((k, i) => idx[k.toLowerCase()] = i);
+          let added = 0;
+          lines.forEach(line => {
+            const cols = line.match(/\"([^\"]|\"\")*\"|[^,]+/g)?.map(s => s.replace(/^\"|\"$/g, '').replace(/\"\"/g, '\"')) || [];
+            const code = cols[idx['code']];
+            if (code) { state.scans.push({ id: cols[idx['id']] || uid(), code, ts: cols[idx['ts']] || nowISO(), source: cols[idx['source']] || 'import', synced: cols[idx['synced']] === 'true', tries: parseInt(cols[idx['tries']] || '0', 10), error: cols[idx['error']] || null }); added++; }
+          });
+          saveScans(state.scans); renderTable();
+          log(`Nhập CSV: +${added} mục.`);
+        }
+        e.target.value = '';
+      });
+
+      const btnClear = $('#btn-clear'); if (btnClear) btnClear.addEventListener('click', () => {
+        if (confirm('Xoá toàn bộ dữ liệu cục bộ?')) { state.scans = []; saveScans(state.scans); renderTable(); log('Đã xoá tất cả trong LocalStorage.', 'warn') }
+      });
+
+      // ===== Self Tests =====
+      function assert(name, cond) { log(`${cond ? '✅ PASS' : '❌ FAIL'} — ${name}`, cond ? 'info' : 'error'); return !!cond }
+      function runSelfTests() {
+        log('<b>Bắt đầu Self‑test…</b>');
+        const backup = JSON.parse(JSON.stringify(state.scans));
+        const cfgBak = JSON.parse(JSON.stringify(state.cfg));
+        try {
+          state.scans = []; saveScans(state.scans);
+          state.cfg.noDup = true;
+          addScan('DUP-001', 'keyboard');
+          addScan('DUP-001', 'keyboard');
+          assert('Chặn trùng hoạt động', state.scans.filter(x => x.code === 'DUP-001').length === 1);
+          state.cfg.split = 'newline';
+          assert('split newline', (function () { const r = (function (t) { return t.split(/\r?\n+/).map(s => s.trim()).filter(Boolean) })('A\nB'); return r.length === 2; })());
+          state.cfg.split = 'comma';
+          assert('split comma', (function () { const r = 'A,B'.split(',').map(s => s.trim()).filter(Boolean); return r.length === 2; })());
+          state.cfg.split = 'semicolon';
+          assert('split semicolon', (function () { const r = 'A;B'.split(';').map(s => s.trim()).filter(Boolean); return r.length === 2; })());
+          const out = (function () {
+            const items = [{ code: 'X', ts: '2000-01-01T00:00:00Z' }];
+            const tpl = state.cfg.payload;
+            const esc = (s) => String(s).replace(/\\/g, '\\\\').replace(/\"/g, '\\"');
+            const lines = items.map(it => `{\"code\": \"${esc(it.code)}\", \"scanned_at\": \"${esc(it.ts)}\"}`);
+            let o = tpl.replace(/\{\{deviceId\}\}/g, state.deviceId).replace(/\{\{batchId\}\}/g, state.batchId).replace(/\{\{#each items\}\}[\s\S]*?\{\{\/each\}\}/g, () => lines.join('\n    '));
+            return o;
+          })();
+          assert('Payload có chứa code', out.includes('\"code\": \"X\"'));
+          const ok = (function () { try { if (!state.cfg.apiUrl) { return true } } catch (e) { return false } return false })();
+          assert('Gọi thử API bỏ qua khi thiếu URL', ok);
+          state.scans = []; saveScans(state.scans);
+          addScan('DEL-001', 'keyboard');
+          const delId = state.scans[0]?.id;
+          state.scans = state.scans.filter(x => x.id !== delId);
+          saveScans(state.scans);
+          assert('Xoá item (logic)', !state.scans.some(x => x.id === delId));
+          const originalCallAPI = callAPI;
+          let apiCalled = false;
+          callAPI = async () => { apiCalled = true; return { ok: true, text: 'ok(mock)' } };
+          state.scans = []; saveScans(state.scans);
+          const it = { id: uid(), code: 'RS-001', ts: nowISO(), source: 'test', synced: false, tries: 0, error: null };
+          state.scans.push(it);
+          syncItems([it]).then(() => {
+            assert('Resync gọi API', apiCalled === true);
+            assert('Resync đánh dấu synced', it.synced === true);
+            callAPI = originalCallAPI;
+            log('<b>Self‑test xong.</b>');
+          });
+        } finally {
+          state.scans = backup; saveScans(state.scans); renderTable();
+          state.cfg = Object.assign(state.cfg, cfgBak); saveCfg(state.cfg); syncCfgToUI();
+        }
+      }
+      const btnSelf = $('#btn-selftest'); if (btnSelf) btnSelf.addEventListener('click', runSelfTests);
+
+      // ===== Init =====
+      async function __init() {
+        const _devidEl = $('#device-id'); if (_devidEl) _devidEl.textContent = state.deviceId;
+        const _pill = $('#device-pill');
+        if (_pill) {
+          _pill.title = 'Nhấn để đổi';
+          _pill.style.cursor = 'pointer';
+          _pill.addEventListener('click', () => {
+            const v = prompt('Nhập Device ID mới:', state.deviceId);
+            if (v) { state.deviceId = v.trim(); localStorage.setItem('device_id', state.deviceId); const _de = $('#device-id'); if (_de) _de.textContent = v; log('Đổi device_id thành ' + v) }
+          });
+        }
+        renderTable();
+        applyVKSuppression();
+        syncCfgToUI();
+        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) { listCameras(); }
+        log('Sẵn sàng. Cấu hình PDA gửi Enter là tối ưu.');
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', __init);
+      } else { __init(); }
+
+      window.addEventListener('resize', renderTable);
+      window.addEventListener('orientationchange', renderTable);
+
+      // ===== Import products/customers from API and store offline =====
+      // Helper function to get nested property from object using dot notation
+      function getNestedProperty(obj, path) {
+        if (!path || path.trim() === '') return obj;
+        const parts = path.split('.').filter(p => p.trim() !== '');
+        let result = obj;
+        for (const part of parts) {
+          if (result === null || result === undefined) return undefined;
+          result = result[part];
+        }
+        return result;
+      }
+
+      async function callImportAPI() {
+        const url = state.cfg.apiImportUrl;
+        if (!url) throw new Error('Thiếu API URL');
+
+        let headers = {};
+        try {
+          headers = JSON.parse(state.cfg.apiImportHeaders || '{}');
+        } catch {
+          throw new Error('Headers JSON không hợp lệ');
+        }
+
+        let body = null;
+        try {
+          body = JSON.parse(state.cfg.apiImportBody || '{}');
+        } catch {
+          throw new Error('Payload JSON không hợp lệ');
+        }
+
+        const res = await fetch(url, {
+          method: 'GET',
+          headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+          body: Object.keys(body).length ? JSON.stringify(body) : undefined
+        });
+        
+        const text = await res.text();
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${text}`)
+        };
+
+        try {
+          const jsonResponse = JSON.parse(text);
+          const dataPath = state.cfg.apiImportDataPath || 'data';
+          const data = getNestedProperty(jsonResponse, dataPath);
+          
+          if (data === undefined) {
+            throw new Error(`Không tìm thấy dữ liệu tại đường dẫn: ${dataPath}`);
+          }
+          
+          return data;
+        } catch (e) {
+          if (e.message && e.message.includes('Không tìm thấy dữ liệu')) {
+            throw e;
+          }
+          alert('API không trả JSON hợp lệ');
+          throw new Error('API không trả JSON hợp lệ');
+        }
+      }
+
+      async function saveProducts(arr) {
+        // localStorage.setItem(LS_PRODUCTS, JSON.stringify(arr));
+        saveProductsToIndexedDB(arr);
+        getProductsFromIndexedDB();
+
+        // let product = await getProductFromIndexedDB(117851);
+        // console.log(product);
+      }
+
+      // ----------------------- IndexedDB -----------------------
+      function openDB() {
+            return new Promise((resolve, reject) => {
+                let req = indexedDB.open("my_db", 1);
+                req.onupgradeneeded = e => {
+                    let db = e.target.result;
+                    db.createObjectStore(LS_PRODUCTS, {
+                        keyPath: "qrcode"
+                    });
+                };
+                req.onsuccess = e => resolve(e.target.result);
+                req.onerror = reject;
+            });
+        }
+
+      async function saveProductsToIndexedDB(datas) {
+        const db = await openDB();
+
+        // datas = JSON.stringify(datas);
+        let t1 = performance.now();
+        let tx = db.transaction(LS_PRODUCTS, "readwrite");
+        let store = tx.objectStore(LS_PRODUCTS);
+        for (let item of datas) store.put(item);
+        await tx.done;
+        let t2 = performance.now();
+        
+        log("Write time: " + (t2 - t1).toFixed(2) + "ms");
+        log("Count: " + datas.length.toLocaleString());
+      }
+
+      async function getProductsFromIndexedDB() {
+        const db = await openDB();
+
+        let t3 = performance.now();
+        let tx2 = db.transaction(LS_PRODUCTS, "readonly");
+        let getAllReq = tx2.objectStore(LS_PRODUCTS).getAll();
+        let datas = await new Promise(res => {
+            getAllReq.onsuccess = () => res(getAllReq.result);
+        });
+        let t4 = performance.now();
+        
+        log("Read time: " + (t4 - t3).toFixed(2) + "ms");
+        log("Count: " + datas.length.toLocaleString());
+        return datas;
+      }
+
+      async function getProductFromIndexedDB(code) {
+        const db = await openDB();
+        const tx = db.transaction(LS_PRODUCTS, "readonly");
+        const store = tx.objectStore(LS_PRODUCTS);
+
+        const req = store.get(code);
+
+        return new Promise((resolve, reject) => {
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = reject;
+        });
+    }
+
+      function loadProducts() {
+        try { 
+          return getProductsFromIndexedDB();
+          // return JSON.parse(localStorage.getItem(LS_PRODUCTS) || '[]'); 
+        }
+        catch { 
+          return []; 
+        }
+      }
+
+      const btnImportTest = $('#btn-import-test');
+      if (btnImportTest) btnImportTest.addEventListener('click', async () => {
+        try {
+          const data = await callImportAPI();
+          log('Thử API thành công, đáp ứng mẫu: ' + JSON.stringify(data).slice(0, 200));
+        } catch (e) {
+          log('Lỗi test API: ' + e.message, 'error');
+        }
+      });
+
+      const btnImportSync = $('#btn-import-sync');
+      if (btnImportSync) btnImportSync.addEventListener('click', async () => {
+        try {
+          log('Đang tải dữ liệu...');
+          const data = await callImportAPI();
+
+          if (!Array.isArray(data)) {
+            log('Phản hồi API phải là mảng JSON!', 'error');
+            return;
+          }
+
+          saveProducts(data);
+          log(`<span class="ok">Đã lưu ${data.length} mục vào offline storage.</span>`);
+        } catch (e) {
+          log('Lỗi đồng bộ: ' + e.message, 'error');
+        }
+      });
+
+    })();
+  </script>
+</body>
+
+</html>

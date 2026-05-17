@@ -1,0 +1,16 @@
+@import "node_modules/trumbowyg/dist/ui/sass/trumbowyg";
+
+.admin-body {
+    padding-top: var(--navbar-base-height);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.hover-card {
+    transition: 0.3s all ease-in-out;
+}
+.hover-card:hover {
+    transform: scale(1.05);
+}
