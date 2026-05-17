@@ -55,7 +55,7 @@ class StoreRequest extends FormRequest
                 'email',
                 'max:50',
                 // Rule::in([
-                //     'admin@delfi.vn'
+                //     'admin@giltech.com.vn'
                 // ]),
             ],
             'from_name'         => [

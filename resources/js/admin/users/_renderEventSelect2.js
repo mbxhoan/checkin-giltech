@@ -1,4 +1,3 @@
-"use strict";
 
 export const renderEventSelect2 = (companyId, defaultNull = false) => {
   if (companyId) {

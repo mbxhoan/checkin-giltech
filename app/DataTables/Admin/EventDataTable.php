@@ -4,12 +4,14 @@ namespace App\DataTables\Admin;
 
 use App\DataTables\BaseDataTable;
 use App\Helpers\Helper;
+use App\Models\Checkin;
 use App\Models\Client;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\ImpexpFile;
 use App\Models\User;
 use App\Services\Admin\EventService;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 
@@ -57,7 +59,7 @@ class EventDataTable extends BaseDataTable
                 return '<a href="'.$route.'"><b>'.$model->name.'</b> <i class="fa-solid fa-edit fa-fw"></i></a>';
             })
             ->editColumn('updated_by', function(Event $model) {
-                return $model->user->name;
+                return optional($model->user)->name;
             })
             ->editColumn('updated_at', function(Event $model) {
                 return $model->updated_at ? humanize_date($model->updated_at, 'd/m/Y H:i') : null;
@@ -84,23 +86,17 @@ class EventDataTable extends BaseDataTable
                     'event' => $model
                 ]);
 
-                $totalCheckedIn = $this->service->middleware_client()->countClientByCheck($model->code, 'CHECKIN');
+                $totalCheckedIn = (int) ($model->checked_in_clients_count ?? 0);
 
                 /* progress import */
-                $file = $this->service->imp_exp_file()->findByAttributes([
-                    'event_id'  => $model->id,
-                ], [], [], [
-                    'id'        => 'DESC'
-                ]);
-
-                if (!empty($file) && ($file->status == ImpexpFile::STATUS_NEW)) {
+                if (!empty($model->latest_import_file_id) && $model->latest_import_status == ImpexpFile::STATUS_NEW) {
                     $html = view('components._progress', [
-                        'total'     => $file->total_record,
-                        'completed' => $file->total_record_before,
+                        'total'     => $model->latest_import_total_record,
+                        'completed' => $model->latest_import_total_record_before,
                         'dataTime'  => 5, // giây
                         'dataEle'   => '#progress',
                         'dataUrl'   => route('admin.imp_exp_files.progress', [
-                            'imp_exp_file' => $file,
+                            'imp_exp_file' => $model->latest_import_file_id,
                         ]),
                     ]);
                     $routeImport = route('admin.clients.import', $model);
@@ -115,23 +111,17 @@ class EventDataTable extends BaseDataTable
                     'event' => $model
                 ]);
 
-                $totalCheckedOut = $this->service->middleware_client()->countClientByCheck($model->code, 'CHECKOUT');
+                $totalCheckedOut = (int) ($model->checked_out_clients_count ?? 0);
 
                 /* progress import */
-                $file = $this->service->imp_exp_file()->findByAttributes([
-                    'event_id'  => $model->id,
-                ], [], [], [
-                    'id'        => 'DESC'
-                ]);
-
-                if (!empty($file) && ($file->status == ImpexpFile::STATUS_NEW)) {
+                if (!empty($model->latest_import_file_id) && $model->latest_import_status == ImpexpFile::STATUS_NEW) {
                     $html = view('components._progress', [
-                        'total'     => $file->total_record,
-                        'completed' => $file->total_record_before,
+                        'total'     => $model->latest_import_total_record,
+                        'completed' => $model->latest_import_total_record_before,
                         'dataTime'  => 5, // giây
                         'dataEle'   => '#progress',
                         'dataUrl'   => route('admin.imp_exp_files.progress', [
-                            'imp_exp_file' => $file,
+                            'imp_exp_file' => $model->latest_import_file_id,
                         ]),
                     ]);
                     $routeImport = route('admin.clients.import', $model);
@@ -265,6 +255,10 @@ class EventDataTable extends BaseDataTable
     public function query(Event $model)
     {
         return $model->newQuery()
+            ->with([
+                'user:id,name',
+                'province:id,name',
+            ])
             ->withCount([
                 'clients as clients_count' => function ($query) {
                     $query->where('status', '!=', Client::STATUS_DELETED);
@@ -272,7 +266,55 @@ class EventDataTable extends BaseDataTable
                 'users as users_count' => function ($query) {
                     $query->where('status', '!=', User::STATUS_DELETED);
                 },
-            ]);
+            ])
+            ->selectSub(
+                DB::table('checkins')
+                    ->selectRaw('COUNT(DISTINCT qrcode)')
+                    ->whereColumn('checkins.event_id', 'events.id')
+                    ->where('checkins.type', Checkin::TYPE_CHECKIN)
+                    ->where('checkins.status', '!=', Checkin::STATUS_DELETED),
+                'checked_in_clients_count'
+            )
+            ->selectSub(
+                DB::table('checkins')
+                    ->selectRaw('COUNT(DISTINCT qrcode)')
+                    ->whereColumn('checkins.event_id', 'events.id')
+                    ->where('checkins.type', Checkin::TYPE_CHECKOUT)
+                    ->where('checkins.status', '!=', Checkin::STATUS_DELETED),
+                'checked_out_clients_count'
+            )
+            ->selectSub(
+                ImpexpFile::query()
+                    ->select('id')
+                    ->whereColumn('impexp_files.event_id', 'events.id')
+                    ->orderByDesc('id')
+                    ->limit(1),
+                'latest_import_file_id'
+            )
+            ->selectSub(
+                ImpexpFile::query()
+                    ->select('status')
+                    ->whereColumn('impexp_files.event_id', 'events.id')
+                    ->orderByDesc('id')
+                    ->limit(1),
+                'latest_import_status'
+            )
+            ->selectSub(
+                ImpexpFile::query()
+                    ->select('total_record')
+                    ->whereColumn('impexp_files.event_id', 'events.id')
+                    ->orderByDesc('id')
+                    ->limit(1),
+                'latest_import_total_record'
+            )
+            ->selectSub(
+                ImpexpFile::query()
+                    ->select('total_record_before')
+                    ->whereColumn('impexp_files.event_id', 'events.id')
+                    ->orderByDesc('id')
+                    ->limit(1),
+                'latest_import_total_record_before'
+            );
     }
 
     /**

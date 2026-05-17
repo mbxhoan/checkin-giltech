@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleSyncSetting = (isToast = true) => {
   $('#btn-sync-settings').on('click', function (e) {

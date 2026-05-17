@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleClickClearOfflineCheckin } from "./_clearOfflineCheckin";
 import { handleBtnToggleShow } from "./_handleBtnToggleShow";

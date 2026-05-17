@@ -1,4 +1,3 @@
-"use strict";
 
 export const saveFormPrint = (offAfterPrint = true, redirectTo = null) => {
   let printContents = document.getElementById("to-print").innerHTML;

@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleToggleLanguageSelection = () => {
   $('.toggle-language-selection').on('change', function () {

@@ -1,4 +1,3 @@
-"use-strict";
 
 import { checkinOffline } from "./_checkinOffline";
 import { checkinOnline } from "./_checkinOnline";

@@ -5,7 +5,7 @@
         'frontend' => [
             'home' => [
                 'title'         => env('APP_NAME'),
-                'description'   => 'Delfi Checkin Sự kiện',
+                'description'   => 'Giltech Solutions event and check-in platform',
                 'robots'        => 'index',
                 'image'         => "{$urlImage}/meta/pages/home.png",
             ]

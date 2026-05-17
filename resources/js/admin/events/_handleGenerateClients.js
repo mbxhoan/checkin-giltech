@@ -1,4 +1,3 @@
-"use-strict";
 
 // import _btnModules from "../common/_btnModules";
 

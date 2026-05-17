@@ -1,4 +1,3 @@
-"use-strict";
 
 import { submitFormOnChange } from "../common/submitFormOnChange";
 

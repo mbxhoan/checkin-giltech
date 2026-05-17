@@ -1,4 +1,3 @@
-"use-strict";
 
 import { loading } from "./_loading";
 import { printOffline } from "./_printOffline";

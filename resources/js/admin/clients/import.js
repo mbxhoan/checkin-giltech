@@ -1,4 +1,3 @@
-"use-strict";
 
 import { renderProgress } from "../common/_renderProgress";
 

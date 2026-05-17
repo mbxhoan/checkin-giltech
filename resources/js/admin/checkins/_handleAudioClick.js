@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleAudioClick = () => {
   $('.audio-play').on('click', function (e) {

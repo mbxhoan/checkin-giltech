@@ -16,71 +16,79 @@
 @endsection
 
 @section('primary-content')
-    <div class="mb-4">
-        <div class="d-flex justify-content-between">
-            <div class="text-sm">
-                <p>
-                    Hi, {{ auth()->user()->name }}!
+    <div class="scan-index">
+        <div class="scan-page-headline">
+            <div>
+                <p class="scan-page-headline__eyebrow">Xin chào, {{ auth()->user()->name }}</p>
+                <h3 class="scan-page-headline__title">Chọn sự kiện để bắt đầu check-in</h3>
+                <p class="scan-page-headline__description">
+                    Truy cập nhanh màn hình scan của từng sự kiện từ một giao diện gọn và tối ưu cho vận hành.
                 </p>
-                <h3>
-                    Chọn sự kiện:
-                    {{-- <a href="{{ route('admin.events.create') }}" class="text-xs text-primary">
-                        <x-icon name="plus-square" prefix="fa-regular"/>
-                    </a> --}}
-                </h3>
             </div>
-            <div class="text-sm text-end">
-                <div class="">
+            <div class="scan-index__user-card">
+                <div class="scan-index__user-name">
                     {{ auth()->user()->name }}
                 </div>
-                <div class="">
+                <div class="scan-index__user-email">
                     {{ auth()->user()->email }}
                 </div>
             </div>
         </div>
-        <div class="row">
+
+        <div class="row g-3 scan-event-grid">
             @foreach ($events as $event)
-                <div class="col-lg-4 mb-lg-3 mb-2">
+                <div class="col-xl-4 col-lg-6">
                     <a href="{{ route('scan.scan', [
                             'event' => $event
-                        ]) }}" class=""
+                        ]) }}" class="scan-event-card"
                     >
-                        <div class="card">
-                            <x-card>
-                                @slot('title')
-                                    <div class="d-flex justify-content-between">
-                                        <h5 class="mt-2 me-2">{{ $event->code }}</h5>
-                                        @if ($event->logo)
-                                            {{-- <img src="{{ $event->logoUrl->getUrl('thumb') }}" class="" alt="{{ $event->code }}" width="20%" height="auto"> --}}
-                                            <img src="{{ $event->logoUrl->getUrl() }}" class="" alt="{{ $event->code }}" width="20%" height="auto">
-                                        @endif
+                        <x-card class="scan-event-card__surface h-100">
+                            @slot('title')
+                                <div class="scan-event-card__header">
+                                    <div>
+                                        <div class="scan-event-card__code">{{ $event->code }}</div>
+                                        <h5 class="scan-event-card__title">{{ $event->name }}</h5>
                                     </div>
-                                @endslot
-                                <span class="mt-2 text-sm">{{ $event->name }}</span>
-                                <p class="text-sm">
-                                    @if (($event->getEventSetting("ALLOW_CHECKIN_PRINT", null)->value ?? null) && (!empty($event->labels) && $event->labels->count()))
-                                        <x-icon name="print" />
-                                        {{ $event->labels->first()->name }}
+                                    @if ($event->logo)
+                                        <img
+                                            src="{{ $event->logoUrl->getUrl() }}"
+                                            class="scan-event-card__logo"
+                                            alt="{{ $event->code }}"
+                                            loading="lazy"
+                                        >
                                     @endif
-                                </p>
-                                <p class="card-text">
-                                    {{ Str::limit($event->description, 100) }}
-                                </p>
-                                <p class="card-text text-xs">
-                                    <small class="text-muted">Từ {{ humanize_date($event->from_date, 'd-m-Y') }}</small>
-                                    <small class="text-muted">đến {{ humanize_date($event->from_date, 'd-m-Y') }}</small>
-                                </p>
-                            </x-card>
-                        </div>
+                                </div>
+                            @endslot
+
+                            <p class="scan-event-card__description">
+                                {{ Str::limit($event->description, 100) }}
+                            </p>
+
+                            <div class="scan-event-card__meta">
+                                <span>
+                                    <x-icon name="calendar-days" />
+                                    {{ humanize_date($event->from_date, 'd-m-Y') }}
+                                </span>
+                                <span>
+                                    <x-icon name="calendar-check" />
+                                    {{ humanize_date($event->to_date ?? $event->from_date, 'd-m-Y') }}
+                                </span>
+                            </div>
+
+                            @if (($event->getEventSetting("ALLOW_CHECKIN_PRINT", null)->value ?? null) && (!empty($event->labels) && $event->labels->count()))
+                                <div class="scan-event-card__tag">
+                                    <x-icon name="print" />
+                                    {{ $event->labels->first()->name }}
+                                </div>
+                            @endif
+                        </x-card>
                     </a>
                 </div>
             @endforeach
         </div>
-        <div class="mt-5 text-end">
-            {{-- <a href="" class="btn btn-xs btn-secondary">
-                <x-icon name="gear" />
-            </a> --}}
-            <a href="{{ route('scan.logout') }}" class="btn btn-xs btn-primary"
+
+        <div class="scan-page-actions">
+            <a href="{{ route('scan.logout') }}" class="btn btn-primary"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
             >
                 @lang('auth.logout')

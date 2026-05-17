@@ -1,4 +1,3 @@
-"use-strict";
 
 $(document).ready(function() {
     // Khởi tạo Select2 cho dropdown cơ cấu nhiều người

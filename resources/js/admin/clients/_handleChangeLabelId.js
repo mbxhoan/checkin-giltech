@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleChangeLabelId = (modalId, eleId, targetEleId) => {
   $(eleId).on('change', function (event) {

@@ -12,7 +12,7 @@
                 ">
                 <div class="col-md-7 p-5 rounded-start bg-white">
                     <div class="d-flex justify-content-between align-items-center">
-                        <img src="{{ config('info.page.logo_1.internal_path') }}" alt="{{  __('dashboard.dashboard') }}" width="40%">
+                        <x-brand-lockup href="{{ route('home') }}" theme="light" class="mb-4" />
                         <div class="">
                             <h5>@lang('auth.reset_password')</h5>
 

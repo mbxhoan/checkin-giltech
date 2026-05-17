@@ -1,16 +1,15 @@
 <?php
 
 return [
-    'code' => 'DELFIVN',
-    'company_name' => 'CÔNG TY CỔ PHẦN DELFI TECHNOLOGIES',
+    'code' => 'GILTECH-VN',
+    'company_name' => 'Giltech Solutions',
     'address' => 'Địa chỉ : A4-E23 Trường Sơn- Phường 02 - Tân Bình',
     'phone' => '08.39919084',
     'fax' => '08.39919085',
-    'code' => "Delfi-VN",
-    'admin_email' => 'admin@delfi.vn',
+    'admin_email' => 'admin@giltech.com.vn',
     'admin_name' => 'System Admin',
-    'domain' => 'delfi.vn',
-    'internal_domain' => 'delfi.com.vn',
+    'domain' => 'giltech.com.vn',
+    'internal_domain' => 'giltech.com.vn',
     'e-sign' => public_path('assets/images/e-sign.png'),
     'banner' => public_path('assets/images/banner.png'),
     'placeholders' => [
@@ -18,11 +17,11 @@ return [
         'image' => "assets/images/placeholders/image.jpg",
     ],
 
-    'contact_note' => 'Vui lòng liên hệ tại Delfi hoặc hotline: 0973382111 – 0903855990 để được tư vấn và hỗ trợ.',
+    'contact_note' => 'Vui lòng liên hệ Giltech Solutions hoặc hotline: 0973382111 – 0903855990 để được tư vấn và hỗ trợ.',
 
     'info' => [
-        'email_1'   => 'admin@delfi.vn',
-        'name'      => 'Delfi Check-In',
+        'email_1'   => 'admin@giltech.com.vn',
+        'name'      => 'Giltech Solutions',
         'phone'     => '(+84) 902 639233',
         'fax'       => '(+84) 902 639233'
     ],
@@ -32,36 +31,36 @@ return [
             'color' => "444444",
         ],
         'logo_1' => [
-            'title'                 => 'Delfi',
+            'title'                 => 'Giltech Solutions',
             // DEFAULT
             'internal_path'         => 'assets/images/logo.png',
             'internal_path_white'   => 'assets/images/logo-white.png',
             'convert_to_white'      => true,
             'dir_path'              => public_path('assets/images/logo.png'),
             'external_path'         => 'https://static.topcv.vn/company_logos/DLL50lpUflAoHUOP0I6Guw6gIw9WNTuO_1659641509____e44a8d4ace7b4d67158055b5b5bb7899.jpg',
-            'alt'                   => 'Delfi Check-In App Logo',
+            'alt'                   => 'Giltech Solutions logo',
         ],
         'logo_2' => [
-            'title'                 => 'Delfi',
+            'title'                 => 'Giltech Solutions',
             'path'                  => '',
             'external_path'         => 'https://static.topcv.vn/company_logos/DLL50lpUflAoHUOP0I6Guw6gIw9WNTuO_1659641509____e44a8d4ace7b4d67158055b5b5bb7899.jpg',
-            'alt'                   => 'Delfi Logo',
+            'alt'                   => 'Giltech Solutions logo',
         ],
         'link' => [
-            'title'                 => 'Delfi',
-            'href'                  => 'https://delfi.com.vn/',
-            'text'                  => 'Delfi Check-In Vietnam'
+            'title'                 => 'Giltech Solutions',
+            'href'                  => 'https://giltech.com.vn/',
+            'text'                  => 'Giltech Solutions'
         ],
     ],
     'document' => [
-        'internal_path'         => "downloads/[HDSD] Delfi Checkin v1.0.pdf",
-        // 'internal_path'         => 'downloads/documents/DOCUMENT - Delfi CHECK-IN APP.pdf',
-        'dir_path'              => public_path("downloads/[HDSD] Delfi Checkin v1.0.pdf"),
+        'internal_path'         => "downloads/[HDSD] Giltech Checkin v1.0.pdf",
+        // 'internal_path'         => 'downloads/documents/DOCUMENT - Giltech CHECK-IN APP.pdf',
+        'dir_path'              => public_path("downloads/[HDSD] Giltech Checkin v1.0.pdf"),
         'update_at'             => '25/06/2024'
     ],
     'credits' => [
-        'rights'                => '© '.now()->format('Y').' Delfi Checkin. All rights reserved.',
-        'name'                  => 'Delfi Technologies Viet Nam',
+        'rights'                => '© '.now()->format('Y').' Giltech Solutions. All rights reserved.',
+        'name'                  => 'Giltech Solutions',
         'address'               => '38 Duong Phan Dinh Giot, Phuong 2, Tan Binh, Ho Chi Minh',
     ],
     'events'            => [

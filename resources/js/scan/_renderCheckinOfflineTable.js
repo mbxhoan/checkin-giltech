@@ -1,4 +1,3 @@
-"use-strict";
 
 export const renderCheckinOfflineTable = () => {
   const eventCode = $("#event_code").val();

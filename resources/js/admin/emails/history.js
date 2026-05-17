@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleChangeStatus } from "./_handleChangeStatus";
 import { renderSendMailTable } from "./_renderSendMailTable";

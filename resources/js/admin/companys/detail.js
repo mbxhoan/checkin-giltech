@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleSyncSetting } from "../events/_handleSyncSetting";
 

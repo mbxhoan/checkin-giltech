@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleChangeCardId = (eleId, endpoint) => {
   $(eleId).on('change', function (event) {

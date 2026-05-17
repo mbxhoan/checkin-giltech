@@ -377,7 +377,7 @@ class User extends Authenticatable implements MustVerifyEmail
             }
 
             /* Thành - MKT */
-            if ($this->email == "thanh.nv@delfi.com.vn") {
+            if ($this->email == "thanh.nv@giltech.com.vn") {
                 $exceptFeatures = array_filter($exceptFeatures, function ($item) {
                     return !in_array($item, [
                         'emails',

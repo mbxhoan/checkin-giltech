@@ -1,4 +1,3 @@
-"use-strict";
 
 import { rendeBarChart } from "./_rendeBarChart";
 import { renderPieChart } from "./_renderPieChart";

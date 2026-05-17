@@ -103,7 +103,10 @@ class ClientDataTable extends BaseDataTable
                 return $model->register_source;
             })
             ->editColumn('updated_by', function(Client $model) {
-                return $model->updated_by ? $model->user->name : null.'<br>'.($model->updated_at ? humanize_date($model->updated_at, 'd/m/Y H:i:s') : null);
+                return collect([
+                    $model->updated_by ? optional($model->user)->name : null,
+                    $model->updated_at ? humanize_date($model->updated_at, 'd/m/Y H:i:s') : null,
+                ])->filter()->implode('<br>');
             })
             ->editColumn('first_checkin_at', function (Client $model) {
                 return $this->formatScanTime($model->first_checkin_at);
@@ -197,6 +200,7 @@ class ClientDataTable extends BaseDataTable
     public function query(Client $model)
     {
         return $model->newQuery()
+            ->with(['user:id,name'])
             ->select('clients.*')
             ->selectSub(
                 Checkin::query()

@@ -1,4 +1,3 @@
-"use-strict";
 
 export const renderProgress = () => {
   const $progressBar = $('#progress-bar');

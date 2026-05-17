@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleEditTranslate = () => {
   $('.edit-translate-field').on('change', function () {

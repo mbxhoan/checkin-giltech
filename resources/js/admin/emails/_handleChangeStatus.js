@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleChangeStatus = () => {
   $('.btn-change-status').off('click').on('click', function (e) {

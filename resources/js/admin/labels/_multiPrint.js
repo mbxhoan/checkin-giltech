@@ -1,4 +1,3 @@
-"use strict";
 
 export const handleClickMultiPrint = (offAfterPrint = true) => {
   $("#btn-multi-print").click(function (e) {

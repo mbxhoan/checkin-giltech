@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleClickPrint } from "../labels/_print";
 import { handleFillQrcode } from "./_handle-fill-qrcode";

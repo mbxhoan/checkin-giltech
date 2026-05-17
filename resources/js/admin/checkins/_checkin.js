@@ -1,4 +1,3 @@
-"use-strict";
 
 export const checkin = (eventCode, qrcode) => {
   let token = $('meta[name="csrf-token"]').attr('content');

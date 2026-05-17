@@ -1,6 +1,6 @@
-<div {{ $attributes->merge(['class' => 'card']) }}>
+<div {{ $attributes->class(['card surface-card border-0 shadow-sm']) }}>
     @if (isset($title))
-        <div class="card-header">
+        <div class="card-header border-0 bg-transparent">
             {{ $title }}
         </div>
     @endif
@@ -14,7 +14,7 @@
     </div>
 
     @if (isset($footer))
-        <div class="card-footer">
+        <div class="card-footer border-0 bg-transparent">
             {{ $footer }}
         </div>
     @endif

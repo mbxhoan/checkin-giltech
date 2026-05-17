@@ -34,7 +34,6 @@ use App\Http\Controllers\Admin\LuckyDrawController;
 use App\Http\Controllers\Admin\LuckyDrawRewardController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\OrderController;
-use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', ShowDashboard::class)->name('dashboard');
@@ -45,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('logs', function () {
     if (auth()->check()) {
         if (auth()->user()->isSysAdmin()) {
-            return app(LogViewerController::class)->index();
+            return redirect('/'.trim(config('log-viewer.route_path', 'log-viewer'), '/'));
         }
 
         abort(404);

@@ -1,4 +1,3 @@
-"use strict";
 
 export const handleClickPrint = (offAfterPrint = true) => {
   $("#btn-print").click(function (e) {

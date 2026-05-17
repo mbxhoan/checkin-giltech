@@ -1,17 +1,17 @@
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
 @import 'bootstrap';
 
 // Base
 @import "base/utilities";
 
 // Font-awesome
-@import "node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
-@import "node_modules/@fortawesome/fontawesome-free/scss/regular";
-@import "node_modules/@fortawesome/fontawesome-free/scss/solid";
-@import "node_modules/@fortawesome/fontawesome-free/scss/brands";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/brands";
 
 /* DataTables */
 @import 'table';
@@ -26,3 +26,77 @@
 @import "layouts/posts";
 @import "layouts/administration";
 @import "layouts/login";
+
+body {
+  font-family: 'Public Sans', sans-serif;
+}
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-lockup__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8 58%, #f8fafc 180%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.brand-lockup__mark img {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.brand-lockup__text {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.brand-lockup__title {
+  font-family: 'Geologica', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-lockup__pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.brand-lockup--dark {
+  color: #fff;
+}
+
+.brand-lockup--dark .brand-lockup__pill {
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.brand-lockup--light {
+  color: #0f172a;
+}
+
+.brand-lockup--light .brand-lockup__pill {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369a1;
+}
+
+.surface-card {
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+}

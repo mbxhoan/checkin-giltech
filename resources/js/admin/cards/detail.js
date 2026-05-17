@@ -1,4 +1,3 @@
-"use-strict";
 
 import { renderBackground } from "../checkins/_renderBackground";
 import { renderProgress } from "../common/_renderProgress";

@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 use App\Models\Event;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use App\Services\Middleware\ClientService as MiddlewareClientService;
 use Carbon\Carbon;
 use App\Models\Client;
@@ -62,142 +63,144 @@ class DashboardService extends BaseService
 
     public function getProgressOnGoingEvents(array $attributes = [])
     {
-        $attributes['status'] = [
-            Event::STATUS_ACTIVE
-        ];
+        $attributes['status'] = [Event::STATUS_ACTIVE];
 
-        $events = $this->event()->getListByAttributes($attributes);
-        $events = $events->filter(function ($event) {
-            // return Carbon::parse($event->from_date)->toDateString() >= now()->toDateString() || Carbon::parse($event->to_date)->toDateString() >= now()->toDateString();
-            return Carbon::parse($event->to_date)->toDateString() >= now()->toDateString();
+        return Cache::remember($this->dashboardCacheKey('ongoing-events', $attributes), now()->addSeconds(60), function () use ($attributes) {
+            $events = $this->event()->getListByAttributes($attributes);
+
+            $events = $events->filter(function ($event) {
+                return Carbon::parse($event->to_date)->toDateString() >= now()->toDateString();
+            });
+
+            foreach ($events as $event) {
+                $event = $event->getProgressOnGoing();
+            }
+
+            return $events;
         });
-
-        foreach ($events as $event) {
-            $event = $event->getProgressOnGoing();
-        }
-
-        return $events;
     }
 
     public function getProvinceEventData(array $attributes = [])
     {
-        // Get top 9 provinces by number of events
-        $topProvinces = DB::table('events');
+        return Cache::remember($this->dashboardCacheKey('province-event-data', $attributes), now()->addSeconds(60), function () use ($attributes) {
+            $topProvinces = DB::table('events');
 
-        if (count($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $topProvinces = $topProvinces->where($key, $value);
+            if (count($attributes)) {
+                foreach ($attributes as $key => $value) {
+                    $topProvinces = $topProvinces->where($key, $value);
+                }
             }
-        }
 
-        $topProvinces = $topProvinces->join('provinces', 'events.province_id', '=', 'provinces.id')
-            ->select('provinces.name', DB::raw('count(*) as total_events'))
-            ->groupBy('provinces.name')
-            ->orderByDesc('total_events')
-            ->limit(9)
-            ->get();
+            $topProvinces = $topProvinces->join('provinces', 'events.province_id', '=', 'provinces.id')
+                ->select('provinces.name', DB::raw('count(*) as total_events'))
+                ->groupBy('provinces.name')
+                ->orderByDesc('total_events')
+                ->limit(9)
+                ->get();
 
-        // Count total events in other provinces
-        $otherProvincesTotal = DB::table('events');
+            $otherProvincesTotal = DB::table('events');
 
-        if (count($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $otherProvincesTotal = $otherProvincesTotal->where($key, $value);
+            if (count($attributes)) {
+                foreach ($attributes as $key => $value) {
+                    $otherProvincesTotal = $otherProvincesTotal->where($key, $value);
+                }
             }
-        }
 
-        $otherProvincesTotal = $otherProvincesTotal->join('provinces', 'events.province_id', '=', 'provinces.id')
-            ->whereNotIn('provinces.name', $topProvinces->pluck('name')->toArray())
-            ->count();
+            $otherProvincesTotal = $otherProvincesTotal->join('provinces', 'events.province_id', '=', 'provinces.id')
+                ->whereNotIn('provinces.name', $topProvinces->pluck('name')->toArray())
+                ->count();
 
-        // Prepare data for the pie chart
-        $provinceData = [];
+            $provinceData = [];
 
-        foreach ($topProvinces as $province) {
-            $provinceData[] = [
-                'name'      => $province->name,
-                'quantity'  => $province->total_events,
+            foreach ($topProvinces as $province) {
+                $provinceData[] = [
+                    'name' => $province->name,
+                    'quantity' => $province->total_events,
+                ];
+            }
+
+            if ($otherProvincesTotal > 0) {
+                $provinceData[] = [
+                    'name' => 'Khác...',
+                    'quantity' => $otherProvincesTotal,
+                ];
+            }
+
+            $totalQuantity = collect($provinceData)->sum('quantity');
+
+            return [
+                'provinceData' => $provinceData,
+                'totalQuantity' => $totalQuantity,
             ];
-        }
-
-        // Add "Others" if needed
-        if ($otherProvincesTotal > 0) {
-            $provinceData[] = [
-                'name'      => 'Khác...',
-                'quantity'  => $otherProvincesTotal,
-            ];
-        }
-
-        $totalQuantity = collect($provinceData)->sum('quantity');
-
-        return [
-            'provinceData'       => $provinceData,
-            'totalQuantity'      => $totalQuantity,
-        ];
+        });
     }
 
     public function getEventClientData(array $attributes = [])
     {
-        // Get top 9 events based on client count
-        $topEvents = DB::table('clients');
+        return Cache::remember($this->dashboardCacheKey('event-client-data', $attributes), now()->addSeconds(60), function () use ($attributes) {
+            $topEvents = DB::table('clients');
 
-        if (count($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $topEvents = $topEvents->where($key, $value);
+            if (count($attributes)) {
+                foreach ($attributes as $key => $value) {
+                    $topEvents = $topEvents->where($key, $value);
+                }
             }
-        }
 
-        $topEvents = $topEvents->join('events', 'clients.event_id', '=', 'events.id')
-            ->select(
-                'events.id',
-                'events.code',
-                'events.name',
-                DB::raw('count(*) as total_clients')
-            )
-            ->groupBy('events.id')
-            ->orderByDesc('total_clients')
-            ->limit(9)
-            ->get();
+            $topEvents = $topEvents->join('events', 'clients.event_id', '=', 'events.id')
+                ->select(
+                    'events.id',
+                    'events.code',
+                    'events.name',
+                    DB::raw('count(*) as total_clients')
+                )
+                ->groupBy('events.id')
+                ->orderByDesc('total_clients')
+                ->limit(9)
+                ->get();
 
-        // Count total clients for all other events
-        $otherEventsTotal = DB::table('clients');
+            $otherEventsTotal = DB::table('clients');
 
-        if (count($attributes)) {
-            foreach ($attributes as $key => $value) {
-                $otherEventsTotal = $otherEventsTotal->where($key, $value);
+            if (count($attributes)) {
+                foreach ($attributes as $key => $value) {
+                    $otherEventsTotal = $otherEventsTotal->where($key, $value);
+                }
             }
-        }
 
-        $otherEventsTotal = $otherEventsTotal->join('events', 'clients.event_id', '=', 'events.id')
-            ->whereNotIn('events.id', $topEvents->pluck('id')->toArray())
-            ->count();
+            $otherEventsTotal = $otherEventsTotal->join('events', 'clients.event_id', '=', 'events.id')
+                ->whereNotIn('events.id', $topEvents->pluck('id')->toArray())
+                ->count();
 
-        // Prepare data
-        $eventData = [];
-        foreach ($topEvents as $event) {
-            $eventData[] = [
-                'id'        => $event->id,
-                'code'     => $event->code,
-                'name'     => $event->name,
-                'quantity' => $event->total_clients,
+            $eventData = [];
+            foreach ($topEvents as $event) {
+                $eventData[] = [
+                    'id' => $event->id,
+                    'code' => $event->code,
+                    'name' => $event->name,
+                    'quantity' => $event->total_clients,
+                ];
+            }
+
+            if ($otherEventsTotal > 0) {
+                $eventData[] = [
+                    'name' => 'Khác...',
+                    'quantity' => $otherEventsTotal,
+                ];
+            }
+
+            $totalQuantity = collect($eventData)->sum('quantity');
+
+            return [
+                'clientEventData' => $eventData,
+                'totalQuantity' => $totalQuantity,
             ];
-        }
+        });
+    }
 
-        // Add "Others" if needed
-        if ($otherEventsTotal > 0) {
-            $eventData[] = [
-                'name'     => 'Khác...',
-                'quantity' => $otherEventsTotal,
-            ];
-        }
+    private function dashboardCacheKey(string $prefix, array $attributes = []): string
+    {
+        ksort($attributes);
 
-        // Calculate total clients
-        $totalQuantity = collect($eventData)->sum('quantity');
-
-        return [
-            'clientEventData'   => $eventData,
-            'totalQuantity'     => $totalQuantity,
-        ];
+        return 'dashboard:'.$prefix.':'.md5(json_encode($attributes));
     }
      // Tổng số client type theo sự kiện
     public function totalClientByType(Event $event)

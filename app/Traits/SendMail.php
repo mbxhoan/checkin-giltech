@@ -308,17 +308,17 @@ trait SendMail
 //   -H "Content-Type: application/json" \
 //   -H "X-Postmark-Server-Token: 6a0e57ca-9b5c-4e5e-9d29-ad8c6c405c67" \
 //   -d '{
-//   "From": "event.infor@delfi.com.vn",
-//   "To": "hoan.mx@delfi.com.vn",
+//   "From": "event.infor@giltech.com.vn",
+//   "To": "hoan.mx@giltech.com.vn",
 //   "TemplateAlias": "user-invitation",
 //   "TemplateModel": {
 //	"name": "Hoan",
-//	"invite_sender_name": "Delfi",
-//	"invite_sender_organization_name": "Delfi VN",
+//	"invite_sender_name": "Giltech",
+//	"invite_sender_organization_name": "Giltech VN",
 //	"product_name": "Ban la",
-//	"action_url": "delfi.com.vn",
-//	"support_email": "event.infor@delfi.com.vn",
-//	"live_chat_url": "delfi.com.vn",
-//	"help_url": "delfi.com.vn"
+//	"action_url": "giltech.com.vn",
+//	"support_email": "event.infor@giltech.com.vn",
+//	"live_chat_url": "giltech.com.vn",
+//	"help_url": "giltech.com.vn"
 // }
 // }'

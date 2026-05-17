@@ -237,7 +237,7 @@
         }
 
         #section-welcome {
-            background-image: url('https://checkin.delfi.vn/storage/medias/696/nền-trơn.png');
+            background-image: url('https://checkin.giltech.com.vn/storage/medias/696/nền-trơn.png');
             background-repeat: no-repeat;
             background-position: bottom center;
             background-size: cover;
@@ -257,7 +257,7 @@
                 z-index: 100;
             ">
 
-            <img src="https://checkin.delfi.vn/storage/medias/687/LOGO.png" alt="Logo PINACO" style="height: 110px;"
+            <img src="https://checkin.giltech.com.vn/storage/medias/687/LOGO.png" alt="Logo PINACO" style="height: 110px;"
                 class="mb-5">
 
             <p class="mt-3 mb-1 fw-bold" style="white-space: nowrap; font-size: 13px;">CÔNG TY CỔ PHẦN PIN ẮC QUY MIỀN NAM (PINACO)</p>
@@ -282,7 +282,7 @@
             style="scroll-behavior: smooth; padding-bottom: 65px;">
 
             <div id="home" class="border-section scroll-section">
-                <img src="https://checkin.delfi.vn/storage/medias/664/KV.png" alt="Key Visual PINACO"
+                <img src="https://checkin.giltech.com.vn/storage/medias/664/KV.png" alt="Key Visual PINACO"
                     class="w-100 object-fit-cover mb-4">
 
                 <div class="px-3 pb-2">
@@ -293,12 +293,12 @@
                     <div class="position-relative mb-4 px-3">
 
                         <!-- Ảnh hiệu ứng -->
-                        <!-- <img src="https://checkin.delfi.vn/storage/medias/691/typo-light-1.png"
+                        <!-- <img src="https://checkin.giltech.com.vn/storage/medias/691/typo-light-1.png"
                             class="position-absolute h-100"
                             style="top: 10px; width: 125%; left: -41%; object-fit: contain; z-index: 2; pointer-events: none;"> -->
 
                         <!-- Ảnh chính -->
-                        <img src="https://checkin.delfi.vn/storage/medias/702/text-(1).png"
+                        <img src="https://checkin.giltech.com.vn/storage/medias/702/text-(1).png"
                             alt="Key Visual PINACO"
                             class="w-100 object-fit-cover"
                             style="position: relative; z-index: 1;">
@@ -316,7 +316,7 @@
                 <div class="text-center mt-2">
                     <div class="text-center mt-2">
                         <div id="cd-title" class="mb-1">
-                            <img src="https://checkin.delfi.vn/storage/medias/679/Pinaco-microsite-04.png"
+                            <img src="https://checkin.giltech.com.vn/storage/medias/679/Pinaco-microsite-04.png"
                                 alt="Sự kiện sẽ bắt đầu sau" style="height: 65px; object-fit: contain;">
                         </div>
 
@@ -356,10 +356,10 @@
                 <div class="row g-3 align-items-center">
                     <div class="col-6 position-relative" style="height: 190px;">
 
-                        <img src="https://checkin.delfi.vn/storage/medias/691/typo-light-1.png"
+                        <img src="https://checkin.giltech.com.vn/storage/medias/691/typo-light-1.png"
                             alt="Hiệu ứng nền"
                             class="position-absolute w-100 h-100"
-                            style="top: 0; left: 0; z-index: 0; object-fit: contain; opacity: 0.8;"> <img src="https://checkin.delfi.vn/storage/medias/666/white-palace__1_-removebg-preview.png"
+                            style="top: 0; left: 0; z-index: 0; object-fit: contain; opacity: 0.8;"> <img src="https://checkin.giltech.com.vn/storage/medias/666/white-palace__1_-removebg-preview.png"
                             alt="Tòa nhà tổ chức"
                             class="w-00 h-100 rounded object-fit-cover position-absolute"
                             style="top: 0; left: 13px; z-index: 1;">
@@ -418,7 +418,7 @@
                     </div>
 
                     <div class="mt-4 text-white text-center">
-                        <img src="https://checkin.delfi.vn/storage/medias/682/Pinaco-microsite-03.png"
+                        <img src="https://checkin.giltech.com.vn/storage/medias/682/Pinaco-microsite-03.png"
                             alt="Chương trình" class="mb-2" style="height: 70px; object-fit: contain;">
 
                         <div class="p-2 rounded-4 mx-auto text-start " style="background-color: #1c4598; max-width: 480px; font-size: 12px; font-weight: 400; line-height: 1.6;">
@@ -513,27 +513,27 @@
                     <div class="swiper mySwiper">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <img src="https://checkin.delfi.vn/storage/medias/725/cổng-1404.jpg"
+                                <img src="https://checkin.giltech.com.vn/storage/medias/725/cổng-1404.jpg"
                                     alt="Sự kiện">
                             </div>
                             <div class="swiper-slide">
-                                <img src="https://checkin.delfi.vn/storage/medias/708/Poster-DHY-demo.png"
+                                <img src="https://checkin.giltech.com.vn/storage/medias/708/Poster-DHY-demo.png"
                                     alt="Sự kiện">
                             </div>
                             <div class="swiper-slide">
-                                <img src="https://checkin.delfi.vn/storage/medias/705/Poster-Tuyen-Tang-demo.png"
+                                <img src="https://checkin.giltech.com.vn/storage/medias/705/Poster-Tuyen-Tang-demo.png"
                                     alt="Sự kiện">
                             </div>
                             <div class="swiper-slide">
-                                <img src="https://checkin.delfi.vn/storage/medias/706/Poster-Vinh-Phu-demo.png"
+                                <img src="https://checkin.giltech.com.vn/storage/medias/706/Poster-Vinh-Phu-demo.png"
                                     alt="Sự kiện">
                             </div>
                             <div class="swiper-slide">
-                                <img src="https://checkin.delfi.vn/storage/medias/714/SÂN-KHẤU_09042026.jpg"
+                                <img src="https://checkin.giltech.com.vn/storage/medias/714/SÂN-KHẤU_09042026.jpg"
                                     alt="Sự kiện">
                             </div>
                             <!-- <div class="swiper-slide">
-                                <img src="https://delfi.com.vn/storage/uploads/danhmuc/may-pos-tinh-tien-23-typeicon.jpg"
+                                <img src="https://giltech.com.vn/storage/uploads/danhmuc/may-pos-tinh-tien-23-typeicon.jpg"
                                     alt="Sự kiện">
                             </div> -->
                         </div>
@@ -543,7 +543,7 @@
             </div>
 
             <div id="qrcode" class="p-3 border-section scroll-section text-center">
-                <img src="https://checkin.delfi.vn/storage/medias/676/Pinaco-microsite-03.png" alt="Quét mã check-in"
+                <img src="https://checkin.giltech.com.vn/storage/medias/676/Pinaco-microsite-03.png" alt="Quét mã check-in"
                     class="mb-1" style="height: 70px; object-fit: contain;">
 
                 <div class="bg-white p-2 border rounded shadow-sm d-inline-block mb-3">
@@ -555,7 +555,7 @@
                 <div class="small fw-bold text-uppercase">{{ $client->custom_fields['company'] ?? '' }}</div>
 
                 <div class="mt-4 p-2 rounded text-center">
-                    <img src="https://checkin.delfi.vn/storage/medias/680/Pinaco-microsite-06.png"
+                    <img src="https://checkin.giltech.com.vn/storage/medias/680/Pinaco-microsite-06.png"
                         alt="Lưu ý quan trọng khi tham dự sự kiện" class="mb-1"
                         style="height: 50px; object-fit: contain;">
                     <div class="fst-italic text-white text-center px-2" style="font-size: 11px; line-height: 1.6;">
@@ -577,7 +577,7 @@
             </div>
 
             <div id="seating" class="p-3 border-section scroll-section text-center" style="min-height: 80vh;">
-                <img src="https://checkin.delfi.vn/storage/medias/678/Pinaco-microsite-05.png" alt="Sơ đồ chỗ ngồi"
+                <img src="https://checkin.giltech.com.vn/storage/medias/678/Pinaco-microsite-05.png" alt="Sơ đồ chỗ ngồi"
                     class="mb-1" style="height: 70px; object-fit: contain;">
                 <div>
                     <div class="small fw-bold text-uppercase">Nhóm khách: {{ $client->custom_fields['type_guest'] ??
@@ -586,7 +586,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center mb-4 mt-3">
-                    <img src="https://checkin.delfi.vn/storage/medias/735/cho_ngoi_update.jpg"
+                    <img src="https://checkin.giltech.com.vn/storage/medias/735/cho_ngoi_update.jpg"
                         class="img-fluid rounded border"
                         alt="Sơ đồ chỗ ngồi">
                 </div>
@@ -600,7 +600,7 @@
                             style="width: 150%; height: 50px; background: radial-gradient(ellipse at center, rgba(78, 170, 240, 0.7) 0%, transparent 70%); z-index: 1;">
                         </div>
 
-                        <img src="https://checkin.delfi.vn/storage/medias/686/Pinaco-microsite-04.png"
+                        <img src="https://checkin.giltech.com.vn/storage/medias/686/Pinaco-microsite-04.png"
                             alt="Những điều cần lưu ý" class="position-relative"
                             style="height: 30px; object-fit: contain; z-index: 2; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));">
                     </legend>
@@ -644,7 +644,7 @@
 
 
                 <!-- <div class="mt-4 p-3 rounded text-center">
-                    <img src="https://checkin.delfi.vn/storage/medias/685/Pinaco-microsite-05.png"
+                    <img src="https://checkin.giltech.com.vn/storage/medias/685/Pinaco-microsite-05.png"
                         alt="Theo dỗi thông tin kỹ niệm 50 năm thành lập Pinaco" class="mb-1"
                         style="height: 45px; object-fit: contain;">
                     <a href="https://ngoinha.pinaco.com/" target="_blank" class="text-decoration-none">
@@ -665,7 +665,7 @@
 
                     <a href="https://ngoinha.pinaco.com/" target="_blank" class="text-decoration-none"
                     style="display: inline-block; transform: translateY(-30px); position: relative; z-index: 10;">
-                        
+
                         <button class="btn text-white rounded-3 px-5 py-2 fw-bold border border-white shadow"
                             style="background: linear-gradient(to right, #0b2b6d 0%, #4a9dec 100%);">
                             LANDING PAGE
@@ -674,7 +674,7 @@
                 </div>
 
                 <!-- <div class="mt-1 p-3 rounded text-center">
-                    <img src="https://checkin.delfi.vn/storage/medias/680/Pinaco-microsite-06.png"
+                    <img src="https://checkin.giltech.com.vn/storage/medias/680/Pinaco-microsite-06.png"
                         alt="Lưu ý quan trọng khi tham dự sự kiện" class="mb-1"
                         style="height: 80px; object-fit: contain;">
 
@@ -707,7 +707,7 @@
                     @if(!isset($client->custom_fields['attend']))
                     <div id="confirm-form">
                         <div class="text-center mb-2">
-                            <img src="https://checkin.delfi.vn/storage/medias/723/Pinaco-microsite.png"
+                            <img src="https://checkin.giltech.com.vn/storage/medias/723/Pinaco-microsite.png"
                                 alt="Khảo sát"
                                 style="height: 38px; object-fit: contain;">
                         </div>

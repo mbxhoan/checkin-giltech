@@ -16,7 +16,7 @@
                     <div class="col-md-6 p-5 rounded-start bg-white">
                         <div class="form-step align-items-center active" data-step="1">
                             <div class="d-flex justify-content-between align-items-center">
-                                <img src="{{ config('info.page.logo_1.internal_path') }}" alt="{{  __('dashboard.dashboard') }}" width="40%">
+                                <x-brand-lockup href="{{ route('home') }}" theme="light" class="mb-4" />
                                 <div class="fst-italic text-sm">
                                     Vui lòng nhập thông tin đăng ký*
                                 </div>

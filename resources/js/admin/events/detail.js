@@ -1,4 +1,3 @@
-"use-strict";
 
 /* custom field templates */
 import { handleDelCustomFieldTemplate } from "../custom_field_templates/_del-custom-field-template";

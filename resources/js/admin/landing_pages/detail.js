@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleAddRowOption } from "../custom_field_templates/_add-custom-field-template-option";
 import { handleDelCustomFieldTemplate } from "../custom_field_templates/_del-custom-field-template";

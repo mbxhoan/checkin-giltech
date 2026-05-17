@@ -1,4 +1,3 @@
-"use strict";
 
 import validated from '../../common/validated';
 import helper from '../../common/helper';

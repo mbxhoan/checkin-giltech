@@ -57,21 +57,35 @@
     @stack('admin_css')
     @livewireStyles
 </head>
-<body class="admin-body bg-dark">
-    @include('admin/shared/navbar')
+<body class="admin-body">
+    <div class="admin-shell" id="adminShell">
+        @include('admin.shared.sidebar.sidebar')
 
-    <div class="content-wrapper bg-light">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
+        <div class="admin-shell__main">
+            @include('admin.shared.navbar')
+
+            <div class="content-wrapper">
+                <div class="container-fluid admin-content-container">
                     @admin
                         @include('shared/alerts')
                     @endadmin
 
-                    <x-card>
+                    <x-card class="admin-content-surface">
                         @yield('content')
                     </x-card>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop"></div>
+
+    <div class="admin-loading-overlay" id="adminLoadingOverlay" aria-hidden="true">
+        <div class="admin-loading-overlay__card" role="status" aria-live="polite">
+            <span class="admin-loading-overlay__spinner"></span>
+            <div class="admin-loading-overlay__copy">
+                <strong>Đang xử lý</strong>
+                <span id="adminLoadingMessage">Vui lòng chờ trong giây lát...</span>
             </div>
         </div>
     </div>
@@ -136,6 +150,70 @@
             </script>
         @endif
     @endadmin
+
+    <script>
+        window.GiltechLoadingOverlay = {
+            element: null,
+            messageElement: null,
+            show(message) {
+                this.element ??= document.getElementById('adminLoadingOverlay');
+                this.messageElement ??= document.getElementById('adminLoadingMessage');
+
+                if (!this.element) {
+                    return;
+                }
+
+                if (this.messageElement && message) {
+                    this.messageElement.textContent = message;
+                }
+
+                this.element.classList.add('is-visible');
+                this.element.setAttribute('aria-hidden', 'false');
+            },
+            hide() {
+                this.element ??= document.getElementById('adminLoadingOverlay');
+
+                if (!this.element) {
+                    return;
+                }
+
+                this.element.classList.remove('is-visible');
+                this.element.setAttribute('aria-hidden', 'true');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!window.jQuery) {
+                return;
+            }
+
+            const $ = window.jQuery;
+
+            if ($.fn.dataTable) {
+                $.extend(true, $.fn.dataTable.defaults, {
+                    autoWidth: false,
+                    deferRender: true,
+                    searchDelay: 350,
+                    responsive: true,
+                    language: {
+                        processing: 'Đang tải dữ liệu...'
+                    }
+                });
+
+                $(document).on('preXhr.dt', function (_, settings) {
+                    settings.nTableWrapper?.classList.add('is-loading');
+                });
+
+                $(document).on('draw.dt xhr.dt error.dt', function (_, settings) {
+                    settings.nTableWrapper?.classList.remove('is-loading');
+                });
+            }
+
+            window.addEventListener('pageshow', function () {
+                window.GiltechLoadingOverlay.hide();
+            });
+        });
+    </script>
 
     @stack('admin_js')
 

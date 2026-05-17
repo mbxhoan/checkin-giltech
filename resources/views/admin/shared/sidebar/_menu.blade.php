@@ -2,10 +2,15 @@
     $xIconPrefix = $menu['x_icon_prefix'] ?? "fa-solid";
 @endphp
 
-<li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $menu['text'] ?? __('dashboard.dashboard') }}">
-    <a class="nav-link text-sub-menu {{ request()->route()->named($menu['route_prefix']) ? 'active' : '' }}" href="{{ route($menu['route']) }}">
+<li class="admin-sidebar__item">
+    <a
+        class="admin-sidebar__link {{ request()->route()->named($menu['route_prefix']) ? 'is-active' : '' }}"
+        href="{{ route($menu['route']) }}"
+        data-nav-search-label="{{ strtolower($menu['text'] ?? __("dashboard.{$key}")) }}"
+        data-loading-nav="Đang mở {{ strtolower($menu['text'] ?? __("dashboard.{$key}")) }}..."
+    >
         <i class="{{ "{$xIconPrefix} fa-{$menu['x_icon_name']} fa-fw" }}" aria-hidden="true"></i>
-        <span class="nav-link-text">
+        <span>
             {{ $menu['text'] ?? __("dashboard.{$key}") }}
         </span>
     </a>

@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleFillQrcode = () => {
   fillQrcode($('#btn-fill-qrcode'));

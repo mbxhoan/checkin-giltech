@@ -1,4 +1,3 @@
-"use strict";
 
 import { handleChangeLabelId } from "./_handleChangeLabelId";
 

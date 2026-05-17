@@ -1,70 +1,99 @@
-<nav class="navbar bg-dark fixed-top navbar-expand-lg" data-bs-theme="dark">
-    <div class="container">
-        <!-- Branding Image -->
-        <a href="{{ route('home') }}" class="navbar-brand pb-0">
-            {{-- {{ config('app.name', 'Laravel') }} --}}
-            <img src="{{ asset(config('info.page.logo_1.internal_path_white')) }}" alt="{{  __('dashboard.dashboard') }}" height="auto" width="25%">
-        </a>
+@php
+    $user = Auth::user();
+    $roleLabel = $user->isSysAdmin()
+        ? 'Sys Admin'
+        : ($user->isAdmin() ? 'Admin' : 'Operator');
+@endphp
 
-        <!-- Collapsed Hamburger -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+<header class="admin-topbar">
+    <div class="admin-topbar__mobile-brand">
+        <button
+            class="admin-topbar__toggle"
+            id="adminSidebarToggle"
+            type="button"
+            aria-label="Mở menu điều hướng"
+            aria-controls="adminSidebar"
+            aria-expanded="false"
+        >
+            <x-icon name="bars" />
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            @include('admin/shared/sidebar/sidebar')
+        <x-brand-lockup
+            href="{{ route('admin.dashboard') }}"
+            theme="dark"
+            pill="Portal"
+            class="d-lg-none"
+        />
+    </div>
 
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ Auth::user()->name }}
+    <div class="admin-topbar__search">
+        <label class="admin-searchbox" for="adminNavSearch">
+            <x-icon name="magnifying-glass" />
+            <input
+                id="adminNavSearch"
+                type="search"
+                autocomplete="off"
+                placeholder="Tìm nhanh module, báo cáo, người dùng..."
+            >
+            <span class="admin-searchbox__kbd">/</span>
+        </label>
+        <div class="admin-nav-search-results d-none" id="adminNavSearchResults"></div>
+    </div>
+
+    <div class="admin-topbar__actions">
+        <div class="admin-user-chip">
+            <span class="admin-user-chip__meta">{{ $roleLabel }}</span>
+            <strong>{{ $user->name }}</strong>
+        </div>
+
+        <div class="dropdown">
+            <button
+                class="admin-topbar__profile dropdown-toggle"
+                id="navbarDropdownMenuLink"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                type="button"
+            >
+                <span>{{ strtoupper(mb_substr($user->name, 0, 1)) }}</span>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="navbarDropdownMenuLink">
+                <a href="{{ route('users.edit') }}" class="dropdown-item">
+                    @lang('users.settings')
+                </a>
+
+                <a href="{{ asset(config("info.document.internal_path")) }}" class="dropdown-item" download>
+                    Tài liệu hướng dẫn
+                </a>
+
+                @admin
+                    <a href="{{ route('admin.histories.index') }}" class="dropdown-item">
+                        Lịch sử thao tác
                     </a>
+                @endadmin
 
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                        {{-- <a href="{{ route('users.show', Auth::user()) }}" class="dropdown-item">
-                            @lang('users.public_profile')
-                        </a> --}}
+                @sys_admin
+                    <a href="{{ route('admin.logs') }}" target="_blank" class="dropdown-item">
+                        Activity Logs
+                    </a>
+                    <a href="{{ route('admin.api-client-logs.index') }}" class="dropdown-item">
+                        API Logs
+                    </a>
+                @endsys_admin
 
-                        <a href="{{ route('users.edit') }}" class="dropdown-item">
-                            @lang('users.settings')
-                        </a>
+                <div class="dropdown-divider"></div>
 
-                        <a href="{{ asset(config("info.document.internal_path")) }}" class="dropdown-item" download>
-                            Tài liệu - HDSD
-                        </a>
-
-                        @admin
-                            <a href="{{ route('admin.histories.index') }}" class="dropdown-item">
-                                Lịch sử
-                            </a>
-                        @endadmin
-
-                        @sys_admin
-                            {{-- <a href="{{ route('admin.logs') }}" target="_blank" class="dropdown-item">
-                                Telescope
-                            </a> --}}
-                            <a href="{{ route('admin.logs') }}" target="_blank" class="dropdown-item">
-                                Activity Logs
-                            </a>
-                            <a href="{{ route('admin.api-client-logs.index') }}" class="dropdown-item">
-                                API Logs
-                            </a>
-                        @endsys_admin
-
-                        <div class="dropdown-divider"></div>
-
-                        <a href="{{ url('/logout') }}"
-                            class="dropdown-item"
-                            onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
-                            @lang('auth.logout')
-                        </a>
-                        <form id="logout-form" class="d-none" action="{{ url('/logout') }}" method="POST">
-                            {{ csrf_field() }}
-                        </form>
-                    </div>
-                </li>
-            </ul>
+                <a href="{{ url('/logout') }}"
+                    class="dropdown-item"
+                    data-loading-nav="Đang đăng xuất..."
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    @lang('auth.logout')
+                </a>
+                <form id="logout-form" class="d-none" action="{{ url('/logout') }}" method="POST">
+                    {{ csrf_field() }}
+                </form>
+            </div>
         </div>
     </div>
-</nav>
+</header>

@@ -1,4 +1,3 @@
-"use-strict";
 
 $(document).ready(function () {
   // $('#company_id').select2();

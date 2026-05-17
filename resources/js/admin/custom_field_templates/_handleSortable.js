@@ -1,4 +1,3 @@
-"use-strict";
 
 import { loadScript } from "../common/_loadScript";
 

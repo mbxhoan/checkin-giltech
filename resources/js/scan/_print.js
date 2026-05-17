@@ -1,4 +1,3 @@
-"use strict";
 
 export const print = (offAfterPrint = true) => {
   let printContents = document.getElementById("to-print").innerHTML;

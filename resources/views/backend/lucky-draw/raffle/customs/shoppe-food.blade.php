@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>
-            Lucky Draw - Raffle | {{ config('app.name', 'Delfi Technologies') }}
+            Lucky Draw - Raffle | {{ config('app.name', 'Giltech Solutions') }}
         </title>
         <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -24,8 +24,8 @@
         <link rel="stylesheet" href="{{ asset('css/lucky-draw/components/coin.css') }}">
         <link rel="stylesheet" href="{{ asset('css/lucky-draw/components/glow.css') }}">
 
-        <link rel="preload" href="https://ck.delfi.vn/file/access/95" as="image">
-        <link rel="preload" href="https://ck.delfi.vn/file/access/94" as="image">
+        <link rel="preload" href="https://ck.giltech.com.vn/file/access/95" as="image">
+        <link rel="preload" href="https://ck.giltech.com.vn/file/access/94" as="image">
 
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -42,7 +42,7 @@
                 margin: 0;
                 overflow: hidden;
             }
-            
+
             @font-face {
                 font-family: 'Metropolis';
                 src: url('/assets/fonts/Metropolis/Metropolis-Bold.otf') format('truetype');
@@ -55,7 +55,7 @@
                 font-weight: bold;
                 font-style: normal;
             }
-            
+
             * {
                 font-family: 'Metropolis', sans-serif !important;
             }
@@ -248,11 +248,11 @@
             }
 
             @keyframes pulse-text {
-                0%, 100% { 
+                0%, 100% {
                     opacity: 1;
                     transform: scale(1);
                 }
-                50% { 
+                50% {
                     opacity: 0.7;
                     transform: scale(1.03);
                 }
@@ -304,11 +304,11 @@
 
             <div class="row align-items-center" style="height: 100vh; background: url('{{ isset($luckyDrawReward->img_link) ? $luckyDrawReward->img_link : '' }}') no-repeat center center; background-size: cover;">
                 @include('backend.lucky-draw.raffle._firework')
-                
+
                 @if(!isset($luckyDrawReward) || !$luckyDrawReward->order_name)
                 <div class="reward-name">
                     <div style="display: flex; align-items: center; justify-content: center; height: 60vh;">
-                        <img src="https://checkin.delfi.vn/storage/medias/624/CodeLuckydraw_nobox_nhat.jpg" alt="End of prizes" style="max-width: 100%; height: auto;">
+                        <img src="https://checkin.giltech.com.vn/storage/medias/624/CodeLuckydraw_nobox_nhat.jpg" alt="End of prizes" style="max-width: 100%; height: auto;">
                     </div>
                 </div>
                 @endif
@@ -378,13 +378,13 @@
             if (event.keyCode === 32) {
                 const saveBtnBlock = document.getElementById('btn-save-block');
                 const startButton = document.getElementById('startButton');
-                
+
                 // Khóa: không cho Space khi đã có kết quả hoặc đang quay lại một ô
                 if (saveBtnBlock && saveBtnBlock.style.display === 'block') {
                     event.preventDefault();
                     return; // Không làm gì khi đã có kết quả
                 }
-                
+
                 // Chỉ cho phép khi chưa có kết quả và nút Start chưa bị disable
                 if (startButton && !startButton.disabled && startButton.style.display !== 'none') {
                     event.preventDefault();

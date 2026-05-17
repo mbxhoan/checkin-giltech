@@ -26,7 +26,7 @@
             }
 
             /* Thành - MKT */
-            if ($user->email == "thanh.nv@delfi.com.vn") {
+            if ($user->email == "thanh.nv@giltech.com.vn") {
                 $exceptMenus = array_filter($exceptMenus, function ($item) {
                     return !in_array($item, [
                         'campaigns',
@@ -108,35 +108,71 @@
     $sidebarMenus = $filteredMenus;
 @endphp
 
-<ul class="navbar-nav navbar-sidenav hide-scrollbar">
-    @foreach ($sidebarMenus as $key => $menu)
-        @if (isset($menu['subMenus']))
-            <li class="nav-item" role="presentation" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $menu['text'] ?? __("dashboard.dashboard") }}">
-                <span class="nav-link text-sub-menu-title fw-bold {{ request()->route()->named($menu['route_prefix']) ? 'active' : '' }}">
-                    <span class="nav-link-text text-lg">
-                        {{ $menu['text'] ?? __("dashboard.{$key}") }}
-                    </span>
-                </span>
-            </li>
-            @foreach ($menu['subMenus'] as $subMenuKey => $subMenu)
-                @include('admin.shared.sidebar._menu', [
-                    'key'   => $subMenuKey,
-                    'menu'  => $subMenu,
-                ])
-            @endforeach
-        @else
-            @include('admin.shared.sidebar._menu', [
-                'key'   => $key,
-                'menu'  => $menu,
-            ])
-        @endif
-    @endforeach
-</ul>
+<aside class="admin-sidebar hide-scrollbar" id="adminSidebar">
+    <div class="admin-sidebar__header">
+        <x-brand-lockup
+            href="{{ route('admin.dashboard') }}"
+            theme="light"
+            pill="Admin"
+            class="admin-sidebar__brand"
+        />
 
-<ul class="navbar-nav sidenav-toggler">
-    <li class="nav-item">
-        <a class="nav-link text-center" id="sidenavToggler">
-            <x-icon name="angle-left" />
-        </a>
-    </li>
-</ul>
+        <button class="admin-sidebar__close d-lg-none" id="adminSidebarClose" type="button" aria-label="Đóng menu">
+            <x-icon name="xmark" />
+        </button>
+    </div>
+
+    <div class="admin-sidebar__body">
+        @if ($user->isAdmin())
+            <div class="admin-sidebar__section">
+                <span class="admin-sidebar__eyebrow">Thao tác nhanh</span>
+                <a
+                    href="{{ route('admin.events.create') }}"
+                    class="admin-sidebar__quick-link"
+                    data-loading-nav="Đang mở form tạo sự kiện..."
+                >
+                    <x-icon name="plus" />
+                    <span>Tạo sự kiện mới</span>
+                </a>
+            </div>
+        @endif
+
+        <div class="admin-sidebar__section">
+            <span class="admin-sidebar__eyebrow">Điều hướng</span>
+            <ul class="admin-sidebar__menu">
+                @foreach ($sidebarMenus as $key => $menu)
+                    @if (isset($menu['subMenus']))
+                        <li class="admin-sidebar__group">
+                            <span class="admin-sidebar__group-title {{ request()->route()->named($menu['route_prefix']) ? 'is-active' : '' }}">
+                                {{ $menu['text'] ?? __("dashboard.{$key}") }}
+                            </span>
+                            <ul class="admin-sidebar__submenu">
+                                @foreach ($menu['subMenus'] as $subMenuKey => $subMenu)
+                                    @include('admin.shared.sidebar._menu', [
+                                        'key' => $subMenuKey,
+                                        'menu' => $subMenu,
+                                    ])
+                                @endforeach
+                            </ul>
+                        </li>
+                    @else
+                        @include('admin.shared.sidebar._menu', [
+                            'key' => $key,
+                            'menu' => $menu,
+                        ])
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+    </div>
+
+    <div class="admin-sidebar__footer">
+        <div class="admin-sidebar__profile">
+            <span class="admin-sidebar__profile-icon">{{ strtoupper(mb_substr($user->name, 0, 1)) }}</span>
+            <div>
+                <strong>{{ $user->name }}</strong>
+                <div>{{ $user->email }}</div>
+            </div>
+        </div>
+    </div>
+</aside>

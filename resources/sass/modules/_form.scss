@@ -1,7 +1,81 @@
 .form-inline {
   display: inline-block;
 }
+
 .g-recaptcha {
-    margin: 0 auto;
-    width: 304px;
+  margin: 0 auto;
+  width: 304px;
+}
+
+.admin-body {
+  .form-label {
+    margin-bottom: 0.5rem;
+    color: #334155;
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  .form-control,
+  .form-select,
+  .select2-container .select2-selection--single,
+  .select2-container .select2-selection--multiple,
+  .trumbowyg-box,
+  .trumbowyg-editor-box {
+    min-height: 3rem;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+
+  .form-control,
+  .form-select {
+    padding: 0.72rem 0.95rem;
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+
+  .form-control::placeholder {
+    color: #94a3b8;
+  }
+
+  .form-control:focus,
+  .form-select:focus,
+  .select2-container--open .select2-selection,
+  .trumbowyg-box:focus-within {
+    border-color: rgba(14, 165, 233, 0.55);
+    box-shadow: 0 0 0 0.25rem rgba(14, 165, 233, 0.12);
+  }
+
+  .input-group-text {
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 1rem;
+    background: #f8fafc;
+    color: #475569;
+  }
+
+  .input-group > .form-control:not(:last-child),
+  .input-group > .form-select:not(:last-child) {
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  .input-group > .input-group-text {
+    margin-left: 0.5rem;
+  }
+
+  .invalid-feedback {
+    display: block;
+    margin-top: 0.45rem;
+  }
+
+  textarea.form-control {
+    min-height: 8rem;
+  }
+
+  .form-check-input:checked {
+    background-color: #0ea5e9;
+    border-color: #0ea5e9;
+  }
 }

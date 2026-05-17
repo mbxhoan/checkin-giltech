@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleClickMultiPrint } from "../labels/_multiPrint";
 import { handleCheckoutWithoutCheckin } from "./_handleCheckoutWithoutCheckin";

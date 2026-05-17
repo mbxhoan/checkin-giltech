@@ -1,12 +1,14 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="page-header d-lg-flex justify-content-between">
+    <div class="page-header d-lg-flex justify-content-between align-items-start gap-3">
         @if ($pageTitle)
-            <h3>{{ $pageTitle }}</h3>
+            <h3 class="page-header__title">{{ $pageTitle }}</h3>
         @endif
 
-        @yield('buttons')
+        <div class="page-header__actions">
+            @yield('buttons')
+        </div>
     </div>
 
     <div class="container-fluid px-0">
@@ -26,7 +28,7 @@
                             @lang('forms.actions.back')
                         </a>
                         @hasSection('form-action')
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary btn-submit-form">
                                 <x-icon name="save" />
                                 @lang('forms.actions.update')
                             </button>

@@ -38,11 +38,11 @@ class EmailService extends BaseService
             "TemplateModel"             => $variables,
 
             // 'Subject'                   => 'Welcome!',
-            // 'HtmlBody'                  => '<strong>Hello</strong> dear Delfi checkin user.',
+            // 'HtmlBody'                  => '<strong>Hello</strong> dear Giltech checkin user.',
 
-            'MessageStream'             => 'delfi',
+            'MessageStream'             => 'giltech',
 
-            // 'MessageStream'             => 'delfi-stream',
+            // 'MessageStream'             => 'giltech-stream',
         ]);
 
         if ($response->successful()) {

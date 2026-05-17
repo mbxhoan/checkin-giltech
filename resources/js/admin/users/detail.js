@@ -1,4 +1,3 @@
-"use-strict";
 
 import { renderEventSelect2 } from "./_renderEventSelect2";
 

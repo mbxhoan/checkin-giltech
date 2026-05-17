@@ -1,4 +1,3 @@
-"use-strict";
 
 import setDefaultLanguage, { handleMultiLanguage } from "./_handleMultiLanguage";
 

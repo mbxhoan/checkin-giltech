@@ -29,9 +29,6 @@
 
     {{-- Sortable --}}
 
-    {{-- Boostrap --}}
-    <link href="{{ asset('offlines/offline-js/5.3.5-bootstrap.min.js') }}" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-
     <title>{{ !empty($pageTitle) ? $pageTitle." | ".config('app.name') : config('app.name', 'Laravel') }}</title>
 
     <!-- PWA Support -->
@@ -78,7 +75,7 @@
 
     @livewireStyles
 </head>
-<body class="{{ $class ?? 'scan-body' }}" style="
+<body class="scan-body {{ $class ?? '' }}" style="
         background-color: #dddddd78; /* adjust to match image tone */
         background-image: url('{{ $mainBg ?? null }}');
         background-repeat: no-repeat;
@@ -87,7 +84,7 @@
         background-size: cover;
     "
 >
-    <div class="main-content">
+    <div class="main-content scan-app-shell">
         @yield('content')
     </div>
 

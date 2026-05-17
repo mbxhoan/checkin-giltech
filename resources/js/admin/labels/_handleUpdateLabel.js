@@ -1,4 +1,3 @@
-"use-strict";
 
 import { renderLabel } from "../label_details/_renderLabel";
 

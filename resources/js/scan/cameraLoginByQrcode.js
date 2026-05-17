@@ -1,4 +1,3 @@
-"use-strict";
 
 $(document).ready(function () {
   handleBtnToggleShow('btn-open-camera', '#cameraBtns', 'camera_visibility');

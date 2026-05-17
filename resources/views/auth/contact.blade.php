@@ -14,7 +14,7 @@
                     {{-- <h1>@lang('auth.login')</h1> --}}
 
                     <div class="">
-                        <img src="{{ config('info.page.logo_1.internal_path') }}" alt="{{  __('dashboard.dashboard') }}" width="40%">
+                        <x-brand-lockup href="{{ route('home') }}" theme="light" class="mb-4" />
                     </div>
 
                     <form action="{{ route('login') }}" method="POST" role="form">

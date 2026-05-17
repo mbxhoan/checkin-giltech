@@ -12,7 +12,7 @@
                 ">
                 <div class="col-md-6 p-5 rounded-start bg-white">
                     <div class="">
-                        <img src="{{ config('info.page.logo_1.internal_path') }}" alt="{{  __('dashboard.dashboard') }}" width="40%">
+                        <x-brand-lockup href="{{ route('home') }}" theme="light" class="mb-4" />
                     </div>
                     <form id="loginForm" action="{{ route('login') }}" method="POST" role="form">
                         @csrf

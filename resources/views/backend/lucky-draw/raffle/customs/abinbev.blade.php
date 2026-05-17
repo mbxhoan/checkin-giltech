@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>
-            Lucky Draw - Raffle | {{ config('app.name', 'Delfi Technologies') }}
+            Lucky Draw - Raffle | {{ config('app.name', 'Giltech Solutions') }}
         </title>
         <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -24,8 +24,8 @@
         <link rel="stylesheet" href="{{ asset('css/lucky-draw/components/coin.css') }}">
         <link rel="stylesheet" href="{{ asset('css/lucky-draw/components/glow.css') }}">
 
-        <link rel="preload" href="https://ck.delfi.vn/file/access/95" as="image">
-        <link rel="preload" href="https://ck.delfi.vn/file/access/94" as="image">
+        <link rel="preload" href="https://ck.giltech.com.vn/file/access/95" as="image">
+        <link rel="preload" href="https://ck.giltech.com.vn/file/access/94" as="image">
 
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -83,8 +83,8 @@
         align-items: center;
         justify-content: center;
         padding: 6px 14px;
-        background: linear-gradient(180deg, 
-            #f5d442 0%, 
+        background: linear-gradient(180deg,
+            #f5d442 0%,
             #e6b800 15%,
             #d4a000 30%,
             #c99700 50%,
@@ -116,8 +116,8 @@
     }
 
     .raffle-box.winner {
-        background: linear-gradient(180deg, 
-            #ffd700 0%, 
+        background: linear-gradient(180deg,
+            #ffd700 0%,
             #ffcc00 15%,
             #e6b800 30%,
             #d4a000 50%,
@@ -138,10 +138,10 @@
     }
 
     @keyframes goldPulse {
-        0%, 100% { 
+        0%, 100% {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.5);
         }
-        50% { 
+        50% {
             box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.7);
         }
     }
@@ -300,7 +300,7 @@
                 $luckyDrawReward = $luckyDrawRewards->first();
             @endphp
 
-            <div class="row align-items-center"  style="height: 100vh; background: url('{{ isset($luckyDrawReward->img_link) ? $luckyDrawReward->img_link : 'https://ck.delfi.vn/file/access/151' }}') no-repeat center center; background-size: cover;">
+            <div class="row align-items-center"  style="height: 100vh; background: url('{{ isset($luckyDrawReward->img_link) ? $luckyDrawReward->img_link : 'https://ck.giltech.com.vn/file/access/151' }}') no-repeat center center; background-size: cover;">
                 @include('backend.lucky-draw.raffle._firework')
                 <div class="reward-name">
 

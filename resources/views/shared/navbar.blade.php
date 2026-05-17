@@ -1,10 +1,6 @@
 <nav class="navbar bg-transparent sticky-top navbar-expand-md">
     <div class="container">
-        <!-- Branding Image -->
-        <a href="{{ route('home') }}" class="navbar-brand">
-            {{-- {{ config('app.name', 'Laravel') }} --}}
-            <img src="{{ asset(config('info.page.logo_1.internal_path_white')) }}" alt="{{  __('dashboard.dashboard') }}" width="30%">
-        </a>
+        <x-brand-lockup href="{{ route('home') }}" theme="dark" pill="Portal" class="navbar-brand" />
 
         <!-- Collapsed Hamburger -->
         <button
@@ -76,4 +72,3 @@
         </div>
     </div>
 </nav>
-

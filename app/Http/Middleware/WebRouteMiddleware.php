@@ -40,7 +40,7 @@ class WebRouteMiddleware
                 }
 
                 /* Thành - MKT */
-                if ($user->email == "thanh.nv@delfi.com.vn") {
+                if ($user->email == "thanh.nv@giltech.com.vn") {
                     $exceptRoutes = array_filter($exceptRoutes, function ($item) {
                         return !in_array($item, [
                             'admin.campaigns.*',

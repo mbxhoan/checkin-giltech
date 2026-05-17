@@ -1,4 +1,3 @@
-"use strict";
 
 export const handleClickPrintByClass = () => {
   $(document).off("click.printByClass", ".btn-print");

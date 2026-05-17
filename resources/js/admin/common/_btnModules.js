@@ -1,4 +1,3 @@
-"use-strict";
 
 // const clearText = (type, ele) => {
 //     if (type !== null) {

@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleDraggableCheckin } from "../checkins/_handleDraggableCheckin";
 import { renderLabel } from "../label_details/_renderLabel";

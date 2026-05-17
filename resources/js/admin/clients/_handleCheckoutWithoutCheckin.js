@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleCheckoutWithoutCheckin = () => {
   $(document).off('submit.checkoutWithoutCheckin', '.js-checkout-form');

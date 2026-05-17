@@ -184,7 +184,7 @@
                     $qr = base64_encode(QrCode::format('png')
                         ->size(400)
                         ->margin(2)
-                        ->merge(public_path('assets/images/delfi-logo.png'), ".3", true)
+                        ->merge(public_path('assets/images/brand/favicon.png'), ".3", true)
                         ->errorCorrection('Q')
                         ->generate($user->login_code));
                 @endphp

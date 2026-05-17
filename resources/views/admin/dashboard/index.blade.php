@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <div class="callout callout-success mb-2 shadow-sm">
                 <h6 class="fw-bold">
-                    Chào mừng bạn đã đến với Delfi Checkin, {{ auth()->user()->name }}!
+                    Chào mừng bạn đến với Giltech Solutions, {{ auth()->user()->name }}!
                 </h6>
                 <p class="text-xs">
                     {{ config("info.quotes")[array_rand(config("info.quotes"))] }}

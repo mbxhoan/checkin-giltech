@@ -1,4 +1,3 @@
-"use-strict";
 
 import { checkin } from "../checkins/_checkin";
 

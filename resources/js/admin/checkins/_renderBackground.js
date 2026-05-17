@@ -1,4 +1,3 @@
-"use-strict";
 
 import { handleDraggableCheckin } from "./_handleDraggableCheckin";
 

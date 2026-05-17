@@ -1,6 +1,6 @@
 {
     "background_color": "black",
-    "description": "Chekin - Ứng dụng kiểm tra nhanh chóng. Hey, at least it isn't cats.",
+    "description": "Giltech Solutions - nền tảng check-in và vận hành sự kiện.",
     "display": "fullscreen",
     "icons": [
       {
@@ -9,7 +9,7 @@
         "type": "image/png"
       }
     ],
-    "name": "Delfi Checkin Application",
-    "short_name": "Checkin",
+    "name": "Giltech Solutions",
+    "short_name": "Giltech",
     "start_url": "/login"
   }

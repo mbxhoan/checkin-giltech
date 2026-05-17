@@ -5,8 +5,8 @@
 ])
 
 @section('content')
-    <div class="container-fluid bg-transparent">
-        <div class="row bg-transparent justify-content-{{ $align ?? "center" }}">
+    <div class="container-fluid scan-page-shell">
+        <div class="row justify-content-{{ $align ?? "center" }}">
             <div
                 class="
                         col-lg-{{ $form_width ?? 6 }}
@@ -16,8 +16,16 @@
                         {{ $form_class ?? null }}
                     "
                 >
+                <div class="scan-page-shell__header">
+                    <x-brand-lockup
+                        href="{{ route('scan.index') }}"
+                        theme="light"
+                        pill="Scan"
+                    />
+                    <div class="scan-page-shell__eyebrow">{{ config('app.name') }}</div>
+                </div>
 
-                <x-card>
+                <x-card class="scan-panel">
                     @if (!empty($banner))
                         <x-slot:image>
                             <img src="{{ $banner }}" class="rounded-top" alt="Banner" width="100%">

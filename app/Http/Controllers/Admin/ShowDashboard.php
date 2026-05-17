@@ -10,6 +10,7 @@ use App\Services\Admin\DashboardService;
 use App\Services\Videc\TicketAnalyticsService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class ShowDashboard extends Controller
@@ -292,22 +293,28 @@ class ShowDashboard extends Controller
             return null;
         }
 
-        return $this->ticketAnalyticsService->forEvent($event);
+        return Cache::remember("dashboard:videc-analytics:{$event->id}", now()->addSeconds(60), function () use ($event) {
+            return $this->ticketAnalyticsService->forEvent($event);
+        });
     }
 
     private function recentClients(array $attributes = [])
     {
-        return $this->service->client()->getQueryByAttributes($attributes)
-            ->select([
-                'id',
-                'qrcode',
-                'name',
-                'status',
-                'updated_at',
-                'updated_by',
-            ])
-            ->with(['user:id,name'])
-            ->limit(5)
-            ->get();
+        ksort($attributes);
+
+        return Cache::remember('dashboard:recent-clients:'.md5(json_encode($attributes)), now()->addSeconds(60), function () use ($attributes) {
+            return $this->service->client()->getQueryByAttributes($attributes)
+                ->select([
+                    'id',
+                    'qrcode',
+                    'name',
+                    'status',
+                    'updated_at',
+                    'updated_by',
+                ])
+                ->with(['user:id,name'])
+                ->limit(5)
+                ->get();
+        });
     }
 }

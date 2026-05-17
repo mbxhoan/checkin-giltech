@@ -1,4 +1,3 @@
-"use strict";
 
 export const handleMultiLanguage = () => {
     $('.change-language').each(function(index) {

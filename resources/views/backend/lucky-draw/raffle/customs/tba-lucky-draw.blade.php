@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>
-            Lucky Draw - Raffle | {{ config('app.name', 'Delfi Technologies') }}
+            Lucky Draw - Raffle | {{ config('app.name', 'Giltech Solutions') }}
         </title>
         <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -24,8 +24,8 @@
         <link rel="stylesheet" href="{{ asset('css/lucky-draw/components/coin.css') }}">
         <link rel="stylesheet" href="{{ asset('css/lucky-draw/components/glow.css') }}">
 
-        <link rel="preload" href="https://ck.delfi.vn/file/access/95" as="image">
-        <link rel="preload" href="https://ck.delfi.vn/file/access/94" as="image">
+        <link rel="preload" href="https://ck.giltech.com.vn/file/access/95" as="image">
+        <link rel="preload" href="https://ck.giltech.com.vn/file/access/94" as="image">
 
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -42,7 +42,7 @@
                 margin: 0;
                 overflow: hidden;
             }
-            
+
             @font-face {
                 font-family: 'Metropolis';
                 src: url('/assets/fonts/Metropolis/Metropolis-Bold.otf') format('truetype');
@@ -55,7 +55,7 @@
                 font-weight: bold;
                 font-style: normal;
             }
-            
+
             * {
                 font-family: 'Metropolis', sans-serif !important;
             }
@@ -82,7 +82,7 @@
                 /* Gradient cam như hình mẫu */
                 background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff6b35 100%);
                 border-radius: 50px;
-                box-shadow: 
+                box-shadow:
                     0 8px 30px rgba(247, 147, 30, 0.5),
                     0 4px 15px rgba(255, 107, 53, 0.3),
                     inset 0 2px 0 rgba(255, 255, 255, 0.3),
@@ -113,7 +113,7 @@
                 font-size: 1em;
                 font-weight: bold;
                 color: #ffffff;
-                text-shadow: 
+                text-shadow:
                     1px 1px 2px rgba(0, 0, 0, 0.2);
                 text-align: center;
                 white-space: nowrap;
@@ -125,7 +125,7 @@
                 font-size: 0.7em;
                 font-weight: 500;
                 color: #ffffff;
-                text-shadow: 
+                text-shadow:
                     1px 1px 2px rgba(0, 0, 0, 0.2);
                 text-align: center;
                 white-space: nowrap;
@@ -140,15 +140,15 @@
             }
 
             @keyframes pulse {
-                0%, 100% { 
-                    box-shadow: 
+                0%, 100% {
+                    box-shadow:
                         0 8px 30px rgba(247, 147, 30, 0.5),
                         0 4px 15px rgba(255, 107, 53, 0.3),
                         inset 0 2px 0 rgba(255, 255, 255, 0.3),
                         inset 0 -2px 0 rgba(0, 0, 0, 0.1);
                 }
-                50% { 
-                    box-shadow: 
+                50% {
+                    box-shadow:
                         0 8px 40px rgba(247, 147, 30, 0.8),
                         0 4px 20px rgba(255, 107, 53, 0.6),
                         inset 0 2px 0 rgba(255, 255, 255, 0.4),
@@ -163,14 +163,14 @@
             }
 
             @keyframes winner-glow {
-                0%, 100% { 
-                    box-shadow: 
+                0%, 100% {
+                    box-shadow:
                         0 8px 30px rgba(247, 147, 30, 0.6),
                         0 4px 15px rgba(255, 107, 53, 0.4),
                         0 0 30px rgba(255, 165, 0, 0.4);
                 }
-                50% { 
-                    box-shadow: 
+                50% {
+                    box-shadow:
                         0 8px 50px rgba(247, 147, 30, 0.9),
                         0 4px 25px rgba(255, 107, 53, 0.7),
                         0 0 50px rgba(255, 165, 0, 0.6);
@@ -207,14 +207,14 @@
                     @if(isset($luckyDrawReward) && $luckyDrawReward->order_name)
                     @else
                     <div style="display: flex; align-items: center; justify-content: center; height: 60vh;">
-                        <img src="https://checkin.delfi.vn/storage/medias/523/ketthuc.jpg" alt="End of prizes" style="max-width: 100%; height: auto;">
+                        <img src="https://checkin.giltech.com.vn/storage/medias/523/ketthuc.jpg" alt="End of prizes" style="max-width: 100%; height: auto;">
                     </div>
                     @endif
                     @if($luckyDrawReward)
                         @php
                             $winnerCount = $luckyDrawClients->where('reward_id', $luckyDrawReward->id)->count();
                         @endphp
-                        
+
                     @endif
                 </div>
                 @if($luckyDrawReward)
@@ -303,4 +303,3 @@
 
     </script>
 </html>
-

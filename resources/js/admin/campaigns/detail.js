@@ -1,4 +1,3 @@
-"use-strict";
 
 import { renderSendMailTable } from "../emails/_renderSendMailTable";
 import { handleChangeStatus } from "../emails/_handleChangeStatus";

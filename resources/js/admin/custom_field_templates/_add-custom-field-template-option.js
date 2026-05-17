@@ -1,4 +1,3 @@
-"use-strict";
 
 export const handleAddRowOption = () => {
   $('.btn-add-option').on('click', function (e) {

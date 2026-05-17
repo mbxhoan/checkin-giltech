@@ -1,4 +1,3 @@
-"use-strict";
 
 export const submitFormOnChange = (inputId, isToast = false, method = 'POST') => {
   const formIdSelector = `#${inputId}`;
