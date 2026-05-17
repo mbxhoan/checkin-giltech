@@ -3,9 +3,6 @@
 ])
 
 @section('content')
-    <div class="page-header">
-        {{-- <h1>@lang('dashboard.this_week')</h1> --}}
-    </div>
     <div class="row g-2">
         <div class="col-md-6">
             <div class="callout callout-success mb-2 shadow-sm">
@@ -43,7 +40,7 @@
     </div>
     <div class="row g-2">
         <div class="col-md-3">
-            <div class="content-block bg-white px-4 py-3 rounded-lg shadow">
+            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
                 <h6 class="text-gray-500">
                     @admin()
                         Tổng Số Sự kiện
@@ -80,7 +77,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="content-block bg-white px-4 py-3 rounded-lg shadow">
+            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
                 <h6 class="text-gray-500">
                     Landing page(s)
                     @admin()
@@ -149,7 +146,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="content-block bg-white px-4 py-3 rounded-lg shadow">
+            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
                 <h6 class="text-gray-500">
                     Gửi mail
                     @admin()
@@ -218,7 +215,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="content-block bg-white px-4 py-3 rounded-lg shadow">
+            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
                 <h3 class="text-xl text-gray-500">Tháng {{ $month }}</h3>
                 @admin
                     <p class="text-l font-bold text-{{ empty($eventsThisMonth) || $eventsThisMonth == 0 ? 'danger' : 'green' }}-600">
@@ -234,10 +231,10 @@
             </div>
         </div>
     </div>
-    <div class="row charts mt-2 g-2">
+    <div class="row charts mt-1 g-2">
         @admin()
             <div class="col-xl-3">
-                <div class="bg-white p-4 rounded-lg shadow" style="max height: 400px !important; height: 400px !important; overflow: hidden;">
+                <div class="bg-white p-3 rounded-lg shadow" style="max height: 400px !important; height: 400px !important; overflow: hidden;">
                     <label class="text font-semibold mb-2">
                         Sự kiện có nhiều khách hàng
                     </label>
@@ -300,7 +297,7 @@
         @endadmin
         @admin()
             <div class="col-xl-3">
-                <div class="bg-white p-4 rounded-lg shadow" style="max height: 400px !important; height: 400px !important;">
+                <div class="bg-white p-3 rounded-lg shadow" style="max height: 400px !important; height: 400px !important;">
                     <h6 class="text font-semibold mb-2">
                         Sự kiện trong các tỉnh thành
                     </h6>
@@ -333,7 +330,7 @@
         @endadmin
         @admin()
             <div class="col-xl-6">
-                <div class="bg-white p-4 rounded-lg shadow" style="max height: 400px !important; height: 400px !important;">
+                <div class="bg-white p-3 rounded-lg shadow" style="max height: 400px !important; height: 400px !important;">
                     <h6 class="text-lg font-semibold mb-2">
                         Xu hướng đầu vào của các sự kiện (Tháng {{ $month }})
                     </h6>
@@ -343,7 +340,7 @@
             </div>
         @else
             <div class="col-xl-3">
-                <div class="bg-white p-4 rounded-lg shadow" style="width: 100%; height: 100%;">
+                <div class="bg-white p-3 rounded-lg shadow" style="width: 100%; height: 100%;">
                     <h6 class="text-lg font-semibold mb-2">
                         Đầu vào sự kiện
                     </h6>
@@ -356,7 +353,7 @@
             </div>
         @endadmin
     </div>
-    @if (!empty($videcAnalytics))
+    {{-- @if (!empty($videcAnalytics))
         <div class="row g-2 mt-2">
             <div class="col-12">
                 @include('admin.videc._ticket-analytics', [
@@ -364,11 +361,11 @@
                 ])
             </div>
         </div>
-    @endif
-    <div class="row mt-2 g-2">
+    @endif --}}
+    <div class="row mt-1 g-2">
         <div class="col-md-6">
-            <div class="bg-white p-4 rounded-lg shadow">
-                <h3 class="text-lg font-semibold mb-4">Khách mời được đăng ký/nhập Gần Đây</h3>
+            <div class="bg-white p-3 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-2">Khách mời được đăng ký/nhập Gần Đây</h3>
                 <div class="table table-responsive">
                     <table class="w-100">
                         <thead class="bg-gray-100 text-xs">
@@ -405,8 +402,8 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="bg-white p-4 rounded-lg shadow">
-                <h3 class="text-lg font-semibold mb-4">Bảng số lượng checkin theo loại khách mời</h3>
+            <div class="bg-white p-3 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-2">Bảng số lượng checkin theo loại khách mời</h3>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped align-middle">
                         <thead class="table-light">
@@ -439,8 +436,8 @@
                     </table>
                 </div>
             </div>
-            <div class="bg-white p-4 rounded-lg shadow mt-2">
-                <h3 class="text-lg font-semibold mb-4">Bảng số lượng checkout theo loại khách mời</h3>
+            <div class="bg-white p-3 rounded-lg shadow mt-1">
+                <h3 class="text-lg font-semibold mb-2">Bảng số lượng checkout theo loại khách mời</h3>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped align-middle">
                         <thead class="table-light">
@@ -476,8 +473,8 @@
         </div>
         <div class="col-md-6">
             @admin()
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-4">
+                <div class="bg-white p-3 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold mb-2">
                         Sự kiện đang triển khai
                         <span class="text-danger">
                             {{ !empty($eventsOnGoing) && $eventsOnGoing->count() ? $eventsOnGoing->count() : 0 }}
@@ -521,7 +518,7 @@
                                             </label>
                                         </td>
                                         <td class="p-2">
-                                            {{ $event->user->name }}
+                                            {{ $event->user?->name ?? '—' }}
                                             <br>
                                             @humanize_date($event->updated_at, 'd/m/Y H:i')
                                         </td>

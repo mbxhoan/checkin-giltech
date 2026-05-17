@@ -64,7 +64,7 @@
 
     <div class="auth-footer">
         Chưa có tài khoản?
-        <a href="{{ route('register') }}">Đăng ký ngay</a>
+        <a href="{{ route('register') }}" style="color:#94a3b8;pointer-events:none;cursor:default;">Đăng ký ngay</a>
     </div>
 
 @endsection
