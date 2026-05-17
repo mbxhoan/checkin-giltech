@@ -1,11 +1,32 @@
 version: '3.8'
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: checkin_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootsecret
+      MYSQL_DATABASE: checkin_db
+      MYSQL_USER: checkin_user
+      MYSQL_PASSWORD: checkin_pass
+    volumes:
+      - mysqldata:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootsecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  # Postgres kept for reference / testing
   postgres:
     image: postgres:15
     container_name: checkin_v3_pgsql_test
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: checkin_v3_db_test
       POSTGRES_USER: checkin_v3_test_user
@@ -14,4 +35,5 @@ services:
       - pgdata:/var/lib/postgresql/data
 
 volumes:
+  mysqldata:
   pgdata:

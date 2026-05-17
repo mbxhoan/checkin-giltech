@@ -1,65 +1,51 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
-@section('content')
-    <div class="row justify-content-md-center">
-        <div class="col-md-10 rounded shadow-sm bg-light" id="login-form-row" style="margin-top: 7%;">
-            <div class="row rounded shadow-sm" style="
-                    background-image: url('{{ asset('assets/images/backgrounds/checkin-login.png') }}');
-                    background-repeat: no-repeat;
-                    background-position: 50%;
-                    background-attachment: fixed;
-                    background-size: contain;
-                ">
-                <div class="col-md-7 p-5 rounded-start bg-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <x-brand-lockup href="{{ route('home') }}" theme="light" class="mb-4" />
-                        <div class="">
-                            <h5>@lang('auth.reset_password')</h5>
+@section('auth-content')
 
-                            @if (session('status'))
-                                <x-alert type="success" :dismissible="true">
-                                    {{ session('status') }}
-                                </x-alert>
-                            @endif
-                        </div>
-                    </div>
+    <img src="{{ asset('assets/images/logo-transparent.png') }}"
+         alt="Giltech Solutions"
+         class="auth-form__icon">
 
-                    <form action="{{ route('password.email') }}" method="POST" role="form">
-                        @csrf
+    <h1 class="auth-form__title">Quên mật khẩu?</h1>
+    <p class="auth-form__sub">Nhập email tài khoản — chúng tôi sẽ gửi link đặt lại mật khẩu ngay</p>
 
-                        <div class="form-group mb-3">
-                            <label for="email" class="form-label control-label">
-                                @lang('validation.attributes.email')
-                            </label>
-
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                @class(['form-control', 'is-invalid' => $errors->has('email')])
-                                required
-                                value="{{ old('email') }}"
-                            >
-
-                            @error('email')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <input type="submit" class="btn btn-primary" value="@lang('auth.send_password_reset_link')">
-                            <a href="{{ route('login') }}" class="ms-2">
-                                <x-icon name="arrow-left" />
-                                Đăng nhập
-                            </a>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="col-md-5 px-0 bg-transparent">
-                    {{-- <img src="{{ asset('assets/images/backgrounds/checkin.png') }}" alt="description" width="100%"> --}}
-                </div>
-            </div>
+    @if (session('status'))
+        <div class="alert alert-success rounded-3 mb-3" style="font-size:.875rem;">
+            <i class="fa-solid fa-circle-check me-2"></i>{{ session('status') }}
         </div>
+    @endif
+
+    <form action="{{ route('password.email') }}" method="POST" novalidate>
+        @csrf
+
+        <div class="auth-field">
+            <label class="auth-label" for="email">Địa chỉ email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                class="auth-input @error('email') is-invalid @enderror"
+                value="{{ old('email') }}"
+                placeholder="you@company.com"
+                autocomplete="email"
+                autofocus
+                required
+            >
+            @error('email')
+                <div class="invalid-feedback d-block mt-1" style="font-size:.8rem;">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="auth-btn-primary">
+            @lang('auth.send_password_reset_link')
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </form>
+
+    <div class="auth-footer mt-3">
+        <a href="{{ route('login') }}" style="color:#0369a1;font-weight:600;text-decoration:none;">
+            <i class="fa-solid fa-arrow-left me-1"></i>Quay lại đăng nhập
+        </a>
     </div>
+
 @endsection

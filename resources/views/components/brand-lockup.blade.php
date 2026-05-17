@@ -11,11 +11,12 @@
 <a href="{{ $href }}" {{ $attributes->class(["brand-lockup", "brand-lockup--{$theme}"]) }}>
     <span class="brand-lockup__mark">
         <img
-            src="{{ asset('assets/images/brand/favicon.png') }}"
+            src="{{ asset('assets/images/logo-transparent.png') }}"
             alt="Giltech Solutions"
-            width="18"
-            height="18"
+            width="22"
+            height="22"
             loading="eager"
+            style="object-fit:contain;"
         >
     </span>
     <span class="brand-lockup__text">

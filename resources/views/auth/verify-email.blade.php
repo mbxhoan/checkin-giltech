@@ -1,34 +1,38 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
-@section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <x-card>
-                    <x-slot:title>
-                        {{-- @lang('Verify Your Email Address') --}}
-                        Xác minh email của bạn
-                    </x-slot>
+@section('auth-content')
 
-                    @if (session('status') == 'verification-link-sent')
-                        <x-alert type="success">
-                            @lang('A fresh verification link has been sent to your email address.')
-                        </x-alert>
-                    @endif
+    <img src="{{ asset('assets/images/logo-transparent.png') }}"
+         alt="Giltech Solutions"
+         class="auth-form__icon">
 
-                    {{-- @lang('Before proceeding, please check your email for a verification link.') --}}
-                    Vui lòng chờ và kiểm tra email xác minh tài khoản gửi đến cho bạn.
+    <h1 class="auth-form__title">Xác minh email</h1>
+    <p class="auth-form__sub">
+        Vui lòng kiểm tra hộp thư và nhấn vào liên kết xác minh chúng tôi đã gửi đến email của bạn.
+    </p>
 
-                    {{-- nếu chưa nhận được email --}}
-                    {{-- @lang('If you did not receive the email'),
-
-                    <form action="{{ route('verification.send') }}" method="POST" class="d-inline" role="form">
-                        @csrf
-
-                        <input type="submit" class="btn btn-link p-0 m-0 align-baseline" value="@lang('click here to request another')">
-                    </form> --}}
-                </x-card>
-            </div>
+    @if (session('status') == 'verification-link-sent')
+        <div class="alert alert-success rounded-3 mb-3" style="font-size:.875rem;">
+            <i class="fa-solid fa-circle-check me-2"></i>
+            Đã gửi lại email xác minh thành công.
         </div>
+    @endif
+
+    <div class="d-flex flex-column gap-3">
+        <form action="{{ route('verification.send') }}" method="POST">
+            @csrf
+            <button type="submit" class="auth-btn-primary">
+                Gửi lại email xác minh
+                <i class="fa-solid fa-envelope"></i>
+            </button>
+        </form>
+
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="w-100 btn btn-light rounded-3" style="font-size:.9rem;padding:.7rem;">
+                Đăng xuất
+            </button>
+        </form>
     </div>
+
 @endsection

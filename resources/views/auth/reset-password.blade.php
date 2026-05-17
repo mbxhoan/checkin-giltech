@@ -1,61 +1,74 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
-@section('content')
-<div class="row justify-content-md-center m-3">
-    <div class="col-md-6">
-        <h1>@lang('auth.reset_password')</h1>
+@section('auth-content')
 
-        <form action="{{ route('password.store') }}" method="POST" role="form">
-            @csrf
+    <img src="{{ asset('assets/images/logo-transparent.png') }}"
+         alt="Giltech Solutions"
+         class="auth-form__icon">
 
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+    <h1 class="auth-form__title">Đặt lại mật khẩu</h1>
+    <p class="auth-form__sub">Nhập mật khẩu mới cho tài khoản của bạn</p>
 
-            <div class="form-group mb-3">
-                <label for="email" class="form-label control-label">
-                    @lang('validation.attributes.email')
-                </label>
+    <form action="{{ route('password.store') }}" method="POST" novalidate>
+        @csrf
+        <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    @class(['form-control', 'is-invalid' => $errors->has('email')])
-                    required
-                    value="{{ $email ?? old('email') }}"
-                >
+        <div class="auth-field">
+            <label class="auth-label" for="email">Địa chỉ email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                class="auth-input @error('email') is-invalid @enderror"
+                value="{{ $email ?? old('email') }}"
+                placeholder="you@company.com"
+                autocomplete="email"
+                required
+            >
+            @error('email')
+                <div class="invalid-feedback d-block mt-1" style="font-size:.8rem;">{{ $message }}</div>
+            @enderror
+        </div>
 
-                @error('email')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-            </div>
+        <div class="auth-field">
+            <label class="auth-label" for="password">Mật khẩu mới</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="auth-input @error('password') is-invalid @enderror"
+                placeholder="••••••••"
+                autocomplete="new-password"
+                required
+            >
+            @error('password')
+                <div class="invalid-feedback d-block mt-1" style="font-size:.8rem;">{{ $message }}</div>
+            @enderror
+        </div>
 
-            @include('components.form-groups.input-group', [
-                'id'                => "password",
-                'model'             => null,
-                'type'              => "password",
-                'label'             => __('validation.attributes.password'),
-                'formClass'         => 'form-group mb-3',
-                'inputClass'        => 'form-control text-sm',
-                'placeholder'       => __('validation.attributes.password'),
-                'required'          => true,
-                'autocomplete'      => 'new-password',
-            ])
-            @include('components.form-groups.input-group', [
-                'id'                => "password_confirmation",
-                'model'             => null,
-                'type'              => "password",
-                'label'             => __('validation.attributes.password_confirmation'),
-                'formClass'         => 'form-group mb-3',
-                'inputClass'        => 'form-control text-sm',
-                'placeholder'       => __('validation.attributes.password_confirmation'),
-                'required'          => true,
-                'autocomplete'      => 'new-password',
-            ])
+        <div class="auth-field">
+            <label class="auth-label" for="password_confirmation">Xác nhận mật khẩu</label>
+            <input
+                type="password"
+                id="password_confirmation"
+                name="password_confirmation"
+                class="auth-input"
+                placeholder="••••••••"
+                autocomplete="new-password"
+                required
+            >
+        </div>
 
-            <div class="form-group mb-3">
-                <input type="submit" class="btn btn-primary" value="@lang('auth.reset_password')">
-            </div>
-        </form>
+        <button type="submit" class="auth-btn-primary">
+            @lang('auth.reset_password')
+            <i class="fa-solid fa-check"></i>
+        </button>
+    </form>
+
+    <div class="auth-footer mt-3">
+        <a href="{{ route('login') }}" style="color:#0369a1;font-weight:600;text-decoration:none;">
+            <i class="fa-solid fa-arrow-left me-1"></i>Quay lại đăng nhập
+        </a>
     </div>
-</div>
+
 @endsection
