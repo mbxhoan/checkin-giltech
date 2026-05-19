@@ -47,22 +47,17 @@ class EventDataTable extends BaseDataTable
                     <i class="fa-regular fa-clipboard"></i>
                 </a>';
 
-                return $btns;
-                return '<a href="'.$route.'"><b>'.$model->code.'</b> <i class="fa-solid fa-edit fa-fw"></i></a>';
-            })
-            ->editColumn('name', function(Event $model) {
                 if (!auth()->user()->isAdmin()) {
-                    return $model->name;
+                    $btns.= '<div><b>'.$model->name.'</b></div>';
+                    return $btns;
                 }
 
-                $route = route('admin.events.edit', $model);
-                return '<a href="'.$route.'"><b>'.$model->name.'</b> <i class="fa-solid fa-edit fa-fw"></i></a>';
+                return $btns.'<div>
+                    <a href="'.$route.'"><b>'.$model->name.'</b> <i class="fa-solid fa-edit fa-fw"></i></a>
+                </div>';
             })
             ->editColumn('updated_by', function(Event $model) {
-                return optional($model->user)->name;
-            })
-            ->editColumn('updated_at', function(Event $model) {
-                return $model->updated_at ? humanize_date($model->updated_at, 'd/m/Y H:i') : null;
+                return optional($model->user)->name.'<br>'.$model->updated_at ? humanize_date($model->updated_at, 'd/m/Y H:i') : null;
             })
             ->addColumn('run_dates', function(Event $model) {
                 if (empty($model->from_date) && empty($model->to_date)) {
@@ -370,9 +365,7 @@ class EventDataTable extends BaseDataTable
     {
         return [
             Column::make('code')
-                ->title("Mã"),
-            Column::make('name')
-                ->title("Tên"),
+                ->title("Thông tin"),
             Column::make('clients_count')
                 ->title("Khách mời"),
             Column::make('checkins_count')
@@ -388,9 +381,7 @@ class EventDataTable extends BaseDataTable
             Column::make('status')
                 ->title("Trạng thái"),
             Column::make('updated_by')
-                ->title("Cập nhật bởi"),
-            Column::make('updated_at')
-                ->title("Cập nhật lúc"),
+                ->title("Cập nhật"),
             Column::make('actions')
                 ->title(""),
         ];

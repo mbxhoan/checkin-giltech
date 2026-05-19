@@ -116,7 +116,7 @@
             @endif
         </div>
 
-        <div class="dashboard-metric-grid">
+        <div class="dashboard-metric-grid my-2">
             <section class="dashboard-panel dashboard-metric-card">
                 <div class="dashboard-stat">
                     <div>
@@ -301,7 +301,7 @@
             @endif
         </div>
 
-        <div class="row g-2">
+        <div class="row g-2 mt-2">
             <div class="{{ $isAdminView ? 'col-12 col-xl-7' : 'col-12 col-xl-6' }}">
                 <section class="dashboard-panel">
                     <div class="dashboard-section-title">
