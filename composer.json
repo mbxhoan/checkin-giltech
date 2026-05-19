@@ -13,7 +13,6 @@
         "jenssegers/agent": "^2.6",
         "ladumor/laravel-pwa": "^0.0.4",
         "laravel/framework": "^13.8",
-        "laravel/horizon": "^5.46",
         "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.20",
         "laravel/tinker": "^3.0",
