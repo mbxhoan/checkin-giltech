@@ -1,8 +1,8 @@
 <div class="d-flex gap-2 flex-wrap">
-    <a href="" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#{{ $requestModalId }}">
+    <a href="#" onclick="return false" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#{{ $requestModalId }}">
         Request
     </a>
-    <a href="" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#{{ $responseModalId }}">
+    <a href="#" onclick="return false" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#{{ $responseModalId }}">
         Response
     </a>
 </div>

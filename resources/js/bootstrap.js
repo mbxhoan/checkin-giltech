@@ -3,7 +3,8 @@
  * for JavaScript based Bootstrap features such as modals and tabs. This
  * code may be modified to fit the specific needs of your application.
  */
-import 'bootstrap'
+// Bootstrap JS loaded as offline global in admin layout (offlines/offline-js/5.3.5-bootstrap.bundle.min.js)
+// window.bootstrap is available globally via that script
 import Clipboard from 'clipboard'
 // import jquery from 'jquery'
 import Echo from 'laravel-echo'

@@ -15,7 +15,7 @@
                 <td>{{ $email->to_email }}</td>
                 <td>
                     {{ $email->to_name }}
-                    <a href="" data-bs-toggle="modal" data-bs-target="#{{ $email->id }}Modal">
+                    <a href="#" onclick="return false" data-bs-toggle="modal" data-bs-target="#{{ $email->id }}Modal">
                         <x-icon name="circle-info" />
                     </a>
                     @include('admin.emails._modal-info', [

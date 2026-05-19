@@ -16,7 +16,7 @@
         @if (!$model->isNew())
             <input type="hidden" name="" id="url" value="{{ route('admin.labels.update-live', $model) }}">
             <div class="col-md-2 text-end">
-                <a href="" class="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#cloneLabelModal">
+                <a href="#" onclick="return false" class="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#cloneLabelModal">
                     Clone
                     <x-icon name="clone"></x-icon>
                 </a>

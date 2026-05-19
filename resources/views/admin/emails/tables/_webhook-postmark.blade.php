@@ -45,7 +45,7 @@
                         <td style="vertical-align: middle;">
                             {{ $webhook->message_stream }} - {{ $webhook->tag ?? "-" }}
                             @if ($webhook->response)
-                                <a href="" data-bs-toggle="modal" data-bs-target="#webhook-response-{{ $webhook->id }}Modal">
+                                <a href="#" onclick="return false" data-bs-toggle="modal" data-bs-target="#webhook-response-{{ $webhook->id }}Modal">
                                     <x-icon name="circle-info" />
                                 </a>
                                 @include('admin.emails._modal-info', [

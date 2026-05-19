@@ -6,7 +6,7 @@
             </h5>
         </div>
         <div class="col-md-8 text-end">
-            <a href="" class="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#cloneLpModal">
+            <a href="#" onclick="return false" class="btn btn-xs btn-primary" data-bs-toggle="modal" data-bs-target="#cloneLpModal">
                 Clone
                 <x-icon name="clone"></x-icon>
             </a>

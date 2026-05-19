@@ -1,6 +1,7 @@
 import 'trumbowyg'
 import svgPath from 'trumbowyg/dist/ui/icons.svg'
-import { Tooltip } from 'bootstrap'
+// Tooltip dùng global window.bootstrap (loaded từ offline bundle trong admin layout)
+const Tooltip = window.bootstrap?.Tooltip
 
 /* common */
 import { btnSubmitLoading } from './common/btnSubmit';
