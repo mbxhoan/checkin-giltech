@@ -48,7 +48,9 @@
         ])
     </div>
 
-    {!! $dataTable->table() !!}
+    <div class="table-responsive">
+        {!! $dataTable->table() !!}
+    </div>
 @endsection
 
 @push('admin_js')

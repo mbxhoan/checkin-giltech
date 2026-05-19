@@ -190,6 +190,8 @@
             const $ = window.jQuery;
 
             if ($.fn.dataTable) {
+                $.fn.dataTable.ext.errMode = 'none';
+
                 $.extend(true, $.fn.dataTable.defaults, {
                     autoWidth: false,
                     deferRender: true,
@@ -206,6 +208,16 @@
 
                 $(document).on('draw.dt xhr.dt error.dt', function (_, settings) {
                     settings.nTableWrapper?.classList.remove('is-loading');
+                });
+
+                $(document).on('error.dt', function (_, settings, __, message) {
+                    settings.nTableWrapper?.classList.remove('is-loading');
+
+                    if (window.toastr) {
+                        toastr.error('Không thể tải dữ liệu bảng. Vui lòng thử lại.');
+                    }
+
+                    console.error(message);
                 });
             }
 

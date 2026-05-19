@@ -65,6 +65,14 @@ class EventDataTable extends BaseDataTable
                 return $model->updated_at ? humanize_date($model->updated_at, 'd/m/Y H:i') : null;
             })
             ->addColumn('run_dates', function(Event $model) {
+                if (empty($model->from_date) && empty($model->to_date)) {
+                    return '<span class="text-muted">Chưa cập nhật</span>';
+                }
+
+                if (empty($model->from_date) || empty($model->to_date)) {
+                    return humanize_date($model->from_date ?? $model->to_date, 'd/m/Y');
+                }
+
                 if ($model->from_date == $model->to_date) {
                     return humanize_date($model->from_date, 'd/m/Y');
                 }

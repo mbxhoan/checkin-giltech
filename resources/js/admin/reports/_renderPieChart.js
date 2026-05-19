@@ -3,6 +3,10 @@ import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export const renderPieChart = () => {
+  if (!document.getElementById('pieChart') || !document.getElementById('checked-chart')) {
+    return;
+  }
+
   var totalChecked = $('#checked-chart').data('checked');
   var total = $('#checked-chart').data('total');
   const xValues = ["Đã checkin", "Chưa checkin"];

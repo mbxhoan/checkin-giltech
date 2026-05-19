@@ -2,9 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Comment;
-use App\Models\Post;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,22 +9,17 @@ class DashboardTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testDashboard()
+    public function test_sys_admin_dashboard_renders_new_summary_layout(): void
     {
-        Post::factory()->count(2)->create();
-        User::factory()->count(2)->create();
-        Comment::factory()->count(2)->create();
+        $admin = $this->admin([
+            'is_admin' => true,
+        ]);
 
-        $this->actingAsAdmin()
+        $this->actingAs($admin)
             ->get('/admin/dashboard')
             ->assertOk()
-            ->assertSee('This week')
-            ->assertSee('Details')
-            ->assertSee('4')
-            ->assertSee('new posts')
-            ->assertSee('9')
-            ->assertSee('new users')
-            ->assertSee('2')
-            ->assertSee('new comments');
+            ->assertSee('Tổng quan điều hành hệ thống')
+            ->assertSee('Luồng thao tác nhanh')
+            ->assertSee('Khách mời được đăng ký/nhập gần đây');
     }
 }

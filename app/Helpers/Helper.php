@@ -12,6 +12,7 @@ use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 use Normalizer;
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use InvalidArgumentException;
 
@@ -251,9 +252,16 @@ class Helper
         return false;
     }
 
-    public static function isTodayInRange(string $fromDate, string $toDate)
+    public static function isTodayInRange(DateTimeInterface|string|null $fromDate, DateTimeInterface|string|null $toDate): bool
     {
-        return Carbon::today()->between(Carbon::parse($fromDate), Carbon::parse($toDate));
+        if (empty($fromDate) || empty($toDate)) {
+            return false;
+        }
+
+        return Carbon::today()->between(
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+        );
     }
 
     public static function removeSpecialCharacters($string)

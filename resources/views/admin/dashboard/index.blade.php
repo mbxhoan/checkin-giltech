@@ -1,550 +1,507 @@
 @extends('admin.layouts.app', [
-    'pageTitle' => "Dashboard"
+    'pageTitle' => 'Dashboard',
 ])
 
+@php
+    $user = auth()->user();
+    $isAdminView = $user->isSysAdmin() || $user->isAdmin();
+    $eventsCollection = collect($events ?? []);
+    $eventsTotal = $eventsCollection->count();
+    $clientsTotal = $clients ?? 0;
+    $landingPagesTotal = $landingPages ?? 0;
+    $campaignsTotal = $campaigns ?? 0;
+    $emailsTotal = $emails ?? 0;
+    $checkedInCount = empty($totalCheckedIn) ? 0 : $totalCheckedIn->count();
+    $roleLabel = $user->isSysAdmin() ? 'System admin' : ($user->isAdmin() ? 'Company admin' : 'Event operator');
+    $heroTitle = $isAdminView ? 'Tổng quan điều hành hệ thống' : 'Theo dõi vận hành sự kiện';
+    $heroDescription = $isAdminView
+        ? 'Theo dõi nhanh số liệu chính, tiến độ triển khai và các khu vực cần xử lý tiếp theo.'
+        : 'Nắm tình hình checkin, khách mời và hoạt động tại sự kiện từ một màn hình gọn hơn.';
+    $topEventRows = collect($clientEventData ?? [])->take(10);
+@endphp
+
 @section('content')
-    <div class="row g-2">
-        <div class="col-md-6">
-            <div class="callout callout-success mb-2 shadow-sm">
-                <h6 class="fw-bold">
-                    Chào mừng bạn đến với Giltech Solutions, {{ auth()->user()->name }}!
-                </h6>
-                <p class="text-xs">
-                    {{ config("info.quotes")[array_rand(config("info.quotes"))] }}
-                </p>
-            </div>
-        </div>
-        @if (auth()->user()->isSysAdmin() || auth()->user()->isAdmin())
-            <div class="col-md-6">
-                <div class="container">
-                    <div class="step-wrapper">
-                        <div class="line"></div>
-                        <div class="step-point">
-                            <a href="#" class="text-sm">
-                                <div class="circle-sm bg-danger"></div>
-                                <div>&nbsp;</div>
-                            </a>
+    <div class="dashboard-stack">
+        <div class="row g-2">
+            <div class="{{ $isAdminView ? 'col-12 col-xxl-8' : 'col-12' }}">
+                <section class="dashboard-panel dashboard-hero-card">
+                    <span class="dashboard-kicker">{{ $roleLabel }}</span>
+                    <h2>{{ $heroTitle }}</h2>
+                    <p>
+                        Xin chào {{ $user->name }}. {{ $heroDescription }}
+                    </p>
+
+                    <div class="dashboard-highlight-grid">
+                        <div class="dashboard-highlight">
+                            <span>{{ $isAdminView ? 'Cụm sự kiện đang quản lý' : 'Khách đã checkin' }}</span>
+                            <strong>{{ $isAdminView ? $eventsTotal : $checkedInCount }}</strong>
+                            <small>{{ $isAdminView ? 'Sự kiện đang hiển thị trong phạm vi tài khoản' : 'So với tổng số khách hiện có' }}</small>
                         </div>
-                        @foreach (config("info.dashboard.steps") as $index => $step)
-                            <div class="step">
-                                <a href="{{ isset($step['route']) ? route($step['route']) : "#" }}" class="text-sm">
-                                    <div class="circle">{{ ++$index }}</div>
-                                    <div class="text-xs">{!! $step['text'] !!}</div>
+                        <div class="dashboard-highlight">
+                            <span>Tổng khách hiện tại</span>
+                            <strong>{{ $clientsTotal }}</strong>
+                            <small>Dữ liệu khách mời/đăng ký đang có trong hệ thống</small>
+                        </div>
+                        <div class="dashboard-highlight">
+                            <span>{{ $isAdminView ? 'Landing pages' : 'Campaigns' }}</span>
+                            <strong>{{ $isAdminView ? $landingPagesTotal : $campaignsTotal }}</strong>
+                            <small>{{ $isAdminView ? 'Bề mặt thu lead và đăng ký đang mở' : 'Hoạt động truyền thông đang gắn với sự kiện' }}</small>
+                        </div>
+                        <div class="dashboard-highlight">
+                            <span>{{ $isAdminView ? 'Email đã gửi' : 'Khách đăng ký tháng này' }}</span>
+                            <strong>{{ $isAdminView ? $emailsTotal : ($clientsThisMonth ?? 0) }}</strong>
+                            <small>{{ $isAdminView ? 'Tổng lượng email chiến dịch đã ghi nhận' : 'Số khách mới trong tháng hiện tại' }}</small>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-actions">
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-sm">
+                            <x-icon name="chart-column" />
+                            Làm mới tổng quan
+                        </a>
+                        @admin
+                            <a href="{{ route('admin.events.index') }}" class="btn btn-outline-primary btn-sm">
+                                <x-icon name="calendar-days" />
+                                Xem sự kiện
+                            </a>
+                            <a href="{{ route('admin.reports.index') }}" class="btn btn-outline-primary btn-sm">
+                                <x-icon name="chart-pie" />
+                                Xem báo cáo
+                            </a>
+                        @endadmin
+                        @unless($isAdminView)
+                            <a href="{{ route('admin.clients.index', $event) }}" class="btn btn-outline-primary btn-sm">
+                                <x-icon name="users" />
+                                Danh sách khách
+                            </a>
+                            <a href="{{ route('admin.reports.report', $event) }}" class="btn btn-outline-primary btn-sm">
+                                <x-icon name="file-lines" />
+                                Báo cáo sự kiện
+                            </a>
+                        @endunless
+                    </div>
+                </section>
+            </div>
+
+            @if ($isAdminView)
+                <div class="col-12 col-xxl-4">
+                    <section class="dashboard-panel dashboard-panel--muted">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Luồng thao tác nhanh</h3>
+                                <p>Đi từ cấu hình hệ thống đến triển khai event mà không bỏ sót bước.</p>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-stepper">
+                            <div class="dashboard-step">
+                                <a href="{{ route('admin.dashboard') }}">
+                                    <span class="dashboard-step__dot">
+                                        <x-icon name="house" />
+                                    </span>
+                                    <div class="dashboard-step__text">Dashboard</div>
                                 </a>
                             </div>
-                        @endforeach
+                            @foreach (config('info.dashboard.steps') as $index => $step)
+                                <div class="dashboard-step">
+                                    <a href="{{ isset($step['route']) ? route($step['route']) : '#' }}">
+                                        <span class="dashboard-step__dot">{{ $index + 1 }}</span>
+                                        <div class="dashboard-step__text">{!! $step['text'] !!}</div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </section>
+                </div>
+            @endif
+        </div>
+
+        <div class="dashboard-metric-grid">
+            <section class="dashboard-panel dashboard-metric-card">
+                <div class="dashboard-stat">
+                    <div>
+                        <span>{{ $isAdminView ? 'Sự kiện' : 'Checkin' }}</span>
+                        <strong>{{ $isAdminView ? $eventsTotal : $checkedInCount }}</strong>
                     </div>
+                    <span class="dashboard-stat__icon">
+                        <x-icon name="{{ $isAdminView ? 'calendar-days' : 'circle-check' }}" />
+                    </span>
+                </div>
+                <div class="dashboard-meta">
+                    {{ $isAdminView ? ($eventsThisMonth ?? 0).' sự kiện bắt đầu trong tháng này' : ($clientsTotal > 0 ? $checkedInCount.'/'.$clientsTotal.' khách đã được xử lý' : 'Chưa có dữ liệu checkin') }}
+                </div>
+            </section>
+
+            <section class="dashboard-panel dashboard-metric-card">
+                <div class="dashboard-stat">
+                    <div>
+                        <span>Landing pages</span>
+                        <strong>{{ $landingPagesTotal }}</strong>
+                    </div>
+                    <span class="dashboard-stat__icon">
+                        <x-icon name="window-maximize" />
+                    </span>
+                </div>
+                <div class="dashboard-meta">
+                    {{ $clientsRegisterLp ?? 0 }} khách đến từ landing page.
+                </div>
+            </section>
+
+            <section class="dashboard-panel dashboard-metric-card">
+                <div class="dashboard-stat">
+                    <div>
+                        <span>Campaigns & email</span>
+                        <strong>{{ $campaignsTotal }}</strong>
+                    </div>
+                    <span class="dashboard-stat__icon">
+                        <x-icon name="paper-plane" />
+                    </span>
+                </div>
+                <div class="dashboard-meta">
+                    {{ $emailsTotal }} email đã ghi nhận trong hệ thống.
+                </div>
+            </section>
+
+            <section class="dashboard-panel dashboard-metric-card">
+                <div class="dashboard-stat">
+                    <div>
+                        <span>Tháng {{ $month }}</span>
+                        <strong>{{ $clientsThisMonth ?? 0 }}</strong>
+                    </div>
+                    <span class="dashboard-stat__icon">
+                        <x-icon name="chart-line" />
+                    </span>
+                </div>
+                <div class="dashboard-meta">
+                    {{ $emailsThisMonth ?? 0 }} email và {{ $isAdminView ? ($eventsThisMonth ?? 0).' sự kiện' : ($campaignsTotal ?? 0).' campaign' }} cập nhật trong tháng.
+                </div>
+            </section>
+        </div>
+
+        @if (!empty($videcAnalytics))
+            <div class="row g-2">
+                <div class="col-12">
+                    @include('admin.videc._ticket-analytics', [
+                        'analytics' => $videcAnalytics,
+                    ])
                 </div>
             </div>
         @endif
-    </div>
-    <div class="row g-2">
-        <div class="col-md-3">
-            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
-                <h6 class="text-gray-500">
-                    @admin()
-                        Tổng Số Sự kiện
-                        <a href="{{ route('admin.events.create') }}" class="text-xs text-primary">
-                            <x-icon name="plus-square" prefix="fa-regular"/>
-                        </a>
-                    @else
-                        {{ $event->name }}
-                    @endadmin
-                </h6>
-                <p class="text-l font-bold text-green-600"></p>
-                @admin()
-                    <p class="text-2xl font-bold text-blue-600">
-                        {{ count($events ?? []) }}
-                        <span class="text-xs text-secondary">
-                            sự kiện
-                        </span>
-                    </p>
-                @else
-                    <p class="text-2xl font-bold text-blue-600">
-                        {{ empty($totalCheckedIn) ? 0 : $totalCheckedIn->count() }}
-                        <span class="text-xs text-secondary">
-                            đã checkin
-                        </span>
-                    </p>
-                @endadmin
-                <p class="text-l font-bold text-green-600"></p>
-                <p class="text-2xl font-bold text-blue-600">
-                    {{ $clients ?? 0 }}
-                    <span class="text-xs text-secondary">
-                        khách
-                    </span>
-                </p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
-                <h6 class="text-gray-500">
-                    Landing page(s)
-                    @admin()
-                        <a href="{{ route('admin.events.create') }}" class="text-xs text-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#selectEventModal"
-                        >
-                            <x-icon name="plus-square" prefix="fa-regular"/>
-                        </a>
-                    @endadmin
-                    <div class="modal fade" id="selectEventModal" data-bs-keyboard="true" tabindex="-1"
-                        aria-labelledby="selectEventModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="selectEventModalLabel">
-                                        Chọn sự kiện
-                                        <a href="{{ route('admin.events.create') }}" class="text-xs text-primary">
-                                            <x-icon name="plus-square" prefix="fa-regular"/>
-                                        </a>
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('admin.landing_pages.select-event-to-create') }}" method="GET">
-                                    <div class="modal-body text-sm">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @include('components.select', [
-                                                    'fieldName'     => 'event_id',
-                                                    'id'            => 'event_id',
-                                                    'options'       => !empty($events) ? $events
-                                                                    ->pluck('name', 'id')
-                                                                    ->toArray() : [],
-                                                    'selected'      => null,
-                                                ])
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                                            @lang('common.close')
-                                        </button>
-                                        <button type="submit" class="btn btn-sm btn-primary">
-                                            Chọn
-                                        </button>
-                                    </div>
-                                </form>
+
+        <div class="row g-2">
+            @if ($isAdminView)
+                <div class="col-12 col-xxl-4">
+                    <section class="dashboard-panel">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Sự kiện có nhiều khách nhất</h3>
+                                <p>Ưu tiên theo số lượng khách hiện đang gắn với event.</p>
                             </div>
                         </div>
-                    </div>
-                </h6>
-                <p class="text-l font-bold text-green-600"></p>
-                <p class="text-2xl font-bold text-blue-600">
-                    {{ $landingPages ?? 0 }}
-                    <span class="text-xs text-secondary">
-                        page(s)
-                    </span>
-                </p>
-                <p class="text-l font-bold text-green-600"></p>
-                <p class="text-2xl font-bold text-blue-600">
-                    {{ $clientsRegisterLp ?? 0 }}
-                    <span class="text-xs text-secondary">
-                        đã đăng ký
-                    </span>
-                </p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
-                <h6 class="text-gray-500">
-                    Gửi mail
-                    @admin()
-                        <a href="{{ route('admin.events.create') }}" class="text-xs text-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#selectEventForCampaignModal"
-                        >
-                            <x-icon name="plus-square" prefix="fa-regular"/>
-                        </a>
-                    @endadmin
-                    <div class="modal fade" id="selectEventForCampaignModal" data-bs-keyboard="true" tabindex="-1"
-                        aria-labelledby="selectEventForCampaignModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="selectEventForCampaignModalLabel">
-                                        Chọn sự kiện
-                                        <a href="{{ route('admin.events.create') }}" class="text-xs text-primary">
-                                            <x-icon name="plus-square" prefix="fa-regular"/>
-                                        </a>
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('admin.campaigns.select-event-to-create') }}" method="GET">
-                                    <div class="modal-body text-sm">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @include('components.select', [
-                                                    'fieldName'     => 'event_id',
-                                                    'id'            => 'event_id',
-                                                    'options'       => !empty($events) ? $events
-                                                                    ->pluck('name', 'id')
-                                                                    ->toArray() : [],
-                                                    'selected'      => null,
-                                                ])
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                                            @lang('common.close')
-                                        </button>
-                                        <button type="submit" class="btn btn-sm btn-primary">
-                                            Chọn
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </h6>
-                <p class="text-l font-bold text-green-600"></p>
-                <p class="text-2xl font-bold text-blue-600">
-                    {{ $campaigns ?? 0 }}
-                    <span class="text-xs text-secondary">
-                        campaign(s)
-                    </span>
-                </p>
-                <p class="text-l font-bold text-green-600"></p>
-                <p class="text-2xl font-bold text-blue-600">
-                    {{ $emails ?? 0 }}
-                    <span class="text-xs text-secondary">
-                        email đã gửi
-                    </span>
-                </p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="content-block bg-white px-3 py-2 rounded-lg shadow">
-                <h3 class="text-xl text-gray-500">Tháng {{ $month }}</h3>
-                @admin
-                    <p class="text-l font-bold text-{{ empty($eventsThisMonth) || $eventsThisMonth == 0 ? 'danger' : 'green' }}-600">
-                        {{ $eventsThisMonth ?? 0 }} sự kiện
-                    </p>
-                @endadmin
-                <p class="text-l font-bold text-{{ empty($clientsThisMonth) || $clientsThisMonth == 0 ? 'danger' : 'green' }}-600">
-                    {{ $clientsThisMonth ?? 0 }} khách
-                </p>
-                <p class="text-l font-bold text-green-600">
-                    {{ $emailsThisMonth ?? 0 }}
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="row charts mt-1 g-2">
-        @admin()
-            <div class="col-xl-3">
-                <div class="bg-white p-3 rounded-lg shadow" style="max height: 400px !important; height: 400px !important; overflow: hidden;">
-                    <label class="text font-semibold mb-2">
-                        Sự kiện có nhiều khách hàng
-                    </label>
-                    <div class="pb-2" style="max-height: 100%;">
-                        @foreach ($clientEventData as $index => $event)
-                            <a
-                                href="{{ $index == 9 ? "#" : route('admin.events.edit', $event['id']) }}"
-                                class="row mb-1 py-1 text-sm fw-bold align-items-center
-                                    {{ $index == 0 ? "bg-success rounded shadow-sm" : "" }}
-                                    {{ $index == 1 ? "bg-warning rounded shadow-sm" : "" }}
-                                    {{ $index == 2 ? "bg-info rounded shadow-sm" : "" }}
-                                    {{ $index == 3 ? "bg-light rounded shadow-sm" : "" }}
-                                    bg-opacity-50 link-opacity-50-hover hover-card"
-                            >
-                                <div class="col-md-1 text-xs ps-1 pe-0">
-                                    {{ ++$index }}
-                                </div>
-                                <div class="col-md-6 {{ $index == 10 ? "fst-italic text-secondary" : "" }}">
-                                    <div class="w-100 text-truncate">
-                                        {{ $event['name'] }}
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    {{ $event['quantity'] }}
-                                    <x-icon name="users"/>
-                                </div>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="col-xl-6">
-                <div style="width: 100%; height: 400px;" class="shadow bg-white rounded p-4">
-                    <div id="col-checkin-chart-loading" style="position: relative; ">
-                        {{-- <div class="" style="position: absolute; top: 10px; left: 0;">
-                            <i class="bx bx-loader bx-spin text-muted" style="font-size: 50px;"></i>
-                        </div> --}}
-                    </div>
-                    <div id="checkin-chart" class="container-fluid"
-                        data-x="{{ json_encode($dateTimes) }}"
-                        data-y="{{ json_encode($checkins) }}"
-                        style="position: relative;"
-                    >
-                        <a id="btn-refresh-chart" href="" class="text-gray" style="position: absolute; top: 5px; right: 5px;">
-                            <i class="bx bx-refresh bx-sm"></i>
-                        </a>
-                        <h6 class="text-lg font-semibold mb-2">
-                            Theo dõi checkin
-                        </h6>
-                        <span class="text-gray text-xs d-lg-block d-md-block d-none">
-                            Báo cáo theo thời gian thực trong thời gian diễn ra sự kiện
-                        </span>
-                        <canvas id="checkinChart"
-                            style="height: 85% !important; max-height: 85% !important;"></canvas>
-                        {{-- <canvas id="checkinChart" style=""></canvas> --}}
-                    </div>
-                </div>
-            </div>
-        @endadmin
-        @admin()
-            <div class="col-xl-3">
-                <div class="bg-white p-3 rounded-lg shadow" style="max height: 400px !important; height: 400px !important;">
-                    <h6 class="text font-semibold mb-2">
-                        Sự kiện trong các tỉnh thành
-                    </h6>
-                    <canvas id="pieChartProviceEventData" class="h-64" style="height: 310px !important; max-height: 310px !important;"></canvas>
-                </div>
-            </div>
-        @else
-            <div class="col-xl-3">
-                <div style="width: 100%; height: 100%;" class="shadow bg-white rounded p-4">
-                    <div id="col-checked-chart-loading" style="position: relative; "></div>
-                    <div id="checked-chart" class="container-fluid"
-                        data-checked="{{ count($checked) }}"
-                        data-total="{{ $clients ?? 0 }}"
-                        style="position: relative;"
-                    >
-                        <a id="btn-refresh-chart" href="" class="text-gray" style="position: absolute; top: 5px; right: 5px;">
-                            <i class="bx bx-refresh bx-sm"></i>
-                        </a>
-                        <h6 class="text-lg font-semibold mb-2">
-                            Đã checkin/Tổng số khách mời
-                        </h6>
-                        <canvas
-                            id="pieChart"
-                            style="height: 92% !important; max-height: 92% !important;"
-                        >
-                        </canvas>
-                    </div>
-                </div>
-            </div>
-        @endadmin
-        @admin()
-            <div class="col-xl-6">
-                <div class="bg-white p-3 rounded-lg shadow" style="max height: 400px !important; height: 400px !important;">
-                    <h6 class="text-lg font-semibold mb-2">
-                        Xu hướng đầu vào của các sự kiện (Tháng {{ $month }})
-                    </h6>
-                    <canvas id="barChart" class="h-64"
-                        style="height: 310px !important; max-height: 310px !important;"></canvas>
-                </div>
-            </div>
-        @else
-            <div class="col-xl-3">
-                <div class="bg-white p-3 rounded-lg shadow" style="width: 100%; height: 100%;">
-                    <h6 class="text-lg font-semibold mb-2">
-                        Đầu vào sự kiện
-                    </h6>
-                    <canvas id="barChart"
-                        style="height: 400px !important; max-height: 100% !important;"
-                        {{-- height="100" --}}
-                    >
-                    </canvas>
-                </div>
-            </div>
-        @endadmin
-    </div>
-    {{-- @if (!empty($videcAnalytics))
-        <div class="row g-2 mt-2">
-            <div class="col-12">
-                @include('admin.videc._ticket-analytics', [
-                    'analytics' => $videcAnalytics,
-                ])
-            </div>
-        </div>
-    @endif --}}
-    <div class="row mt-1 g-2">
-        <div class="col-md-6">
-            <div class="bg-white p-3 rounded-lg shadow">
-                <h3 class="text-lg font-semibold mb-2">Khách mời được đăng ký/nhập Gần Đây</h3>
-                <div class="table table-responsive">
-                    <table class="w-100">
-                        <thead class="bg-gray-100 text-xs">
-                            <tr>
-                                <th class="p-2 text-left">Qrcode</th>
-                                <th class="p-2 text-left">Thông tin</th>
-                                <th class="p-2 text-left">Ngày tạo</th>
-                                <th class="p-2 text-left">Trạng Thái</th>
-                                <th class="p-2 text-left">Cập Nhật</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($clientsx5 as $client)
-                                <tr class="text-xs" data-href="{{ route('admin.clients.edit', [
-                                        'client'    => $client,
-                                    ]) }}"
+
+                        <div class="dashboard-ranking-list">
+                            @forelse ($topEventRows as $index => $eventRow)
+                                <a
+                                    href="{{ isset($eventRow['id']) ? route('admin.events.edit', $eventRow['id']) : '#' }}"
+                                    class="dashboard-ranking-item"
                                 >
-                                    <td class="p-2">{{ $client->qrcode }}</td>
-                                    <td class="p-2">{{ $client->name }}</td>
-                                    <td class="p-2">@humanize_date($client->created_at, 'd/m/Y H:i:s')</td>
-                                    <td class="p-2">
-                                        <label class="btn btn-sm {{ $client->getStatusClass() }}">{{ $client->getStatusText() }}</label>
-                                    </td>
-                                    <td class="p-2">
-                                        {!! $client->updated_by ? $client->user->name : "<em>Không có</em>" !!}
-                                        <br>
-                                        @humanize_date($client->updated_at, 'd/m/Y H:i:s')
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="bg-white p-3 rounded-lg shadow">
-                <h3 class="text-lg font-semibold mb-2">Bảng số lượng checkin theo loại khách mời</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-nowrap">Loại khách mời</th>
-                                <th class="text-nowrap text-center">Số lượng đăng ký</th>
-                                <th class="text-nowrap text-center">Số lượng checkin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $types = array_unique(array_merge(
-                                    array_keys($registerByType ?? []),
-                                    array_keys($checkinByType ?? [])
-                                ));
-                            @endphp
-
-                            @forelse($types as $type)
-                                <tr>
-                                    <td>{{ $type }}</td>
-                                    <td class="text-center">{{ $registerByType[$type] ?? 0 }}</td>
-                                    <td class="text-center">{{ $checkinByType[$type] ?? 0 }}</td>
-                                </tr>
+                                    <span class="dashboard-ranking-item__index">{{ $index + 1 }}</span>
+                                    <span class="dashboard-ranking-item__body">
+                                        <span class="dashboard-ranking-item__title">{{ $eventRow['name'] ?? 'Sự kiện chưa đặt tên' }}</span>
+                                        <span class="dashboard-ranking-item__meta">{{ $eventRow['code'] ?? 'N/A' }}</span>
+                                    </span>
+                                    <strong>{{ $eventRow['quantity'] ?? 0 }}</strong>
+                                </a>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted">Không có dữ liệu</td>
-                                </tr>
+                                <div class="dashboard-note">Chưa có dữ liệu sự kiện để xếp hạng.</div>
                             @endforelse
-                        </tbody>
-                    </table>
+                        </div>
+                    </section>
                 </div>
-            </div>
-            <div class="bg-white p-3 rounded-lg shadow mt-1">
-                <h3 class="text-lg font-semibold mb-2">Bảng số lượng checkout theo loại khách mời</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-nowrap">Loại khách mời</th>
-                                <th class="text-nowrap text-center">Số lượng đăng ký</th>
-                                <th class="text-nowrap text-center">Số lượng checkout</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $types = array_unique(array_merge(
-                                    array_keys($registerByType ?? []),
-                                    array_keys($checkoutByType ?? [])
-                                ));
-                            @endphp
 
-                            @forelse($types as $type)
-                                <tr>
-                                    <td>{{ $type }}</td>
-                                    <td class="text-center">{{ $registerByType[$type] ?? 0 }}</td>
-                                    <td class="text-center">{{ $checkoutByType[$type] ?? 0 }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted">Không có dữ liệu</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div class="col-12 col-xxl-3 col-lg-5">
+                    <section class="dashboard-panel dashboard-chart-card">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Sự kiện theo tỉnh/thành</h3>
+                                <p>Tỷ trọng sự kiện theo địa bàn đang hoạt động.</p>
+                            </div>
+                        </div>
+                        <div style="height: 20rem;">
+                            <canvas id="pieChartProviceEventData"></canvas>
+                        </div>
+                    </section>
                 </div>
-            </div>
+
+                <div class="col-12 col-xxl-5 col-lg-7">
+                    <section class="dashboard-panel dashboard-chart-card">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Xu hướng đầu vào sự kiện</h3>
+                                <p>Phân bổ nguồn đăng ký trong tháng {{ $month }}.</p>
+                            </div>
+                        </div>
+                        <div style="height: 20rem;">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            @else
+                <div class="col-12 col-xl-5">
+                    <section class="dashboard-panel dashboard-chart-card">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Theo dõi checkin</h3>
+                                <p>Báo cáo theo thời gian thực trong lúc sự kiện đang diễn ra.</p>
+                            </div>
+                        </div>
+                        <div
+                            id="checkin-chart"
+                            data-x="{{ json_encode($dateTimes) }}"
+                            data-y="{{ json_encode($checkins) }}"
+                            style="height: 20rem;"
+                        >
+                            <canvas id="checkinChart" style="height: 100% !important;"></canvas>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-12 col-xl-3">
+                    <section class="dashboard-panel dashboard-chart-card">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Đã checkin / tổng khách</h3>
+                                <p>Mức độ hoàn thành checkin tại thời điểm hiện tại.</p>
+                            </div>
+                        </div>
+                        <div
+                            id="checked-chart"
+                            data-checked="{{ count($checked) }}"
+                            data-total="{{ $clientsTotal }}"
+                            style="height: 20rem;"
+                        >
+                            <canvas id="pieChart" style="height: 100% !important;"></canvas>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-12 col-xl-4">
+                    <section class="dashboard-panel dashboard-chart-card">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Đầu vào sự kiện</h3>
+                                <p>Phân bổ khách theo nguồn đăng ký trong tháng.</p>
+                            </div>
+                        </div>
+                        <div style="height: 20rem;">
+                            <canvas id="barChart" style="height: 100% !important;"></canvas>
+                        </div>
+                    </section>
+                </div>
+            @endif
         </div>
-        <div class="col-md-6">
-            @admin()
-                <div class="bg-white p-3 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">
-                        Sự kiện đang triển khai
-                        <span class="text-danger">
-                            {{ !empty($eventsOnGoing) && $eventsOnGoing->count() ? $eventsOnGoing->count() : 0 }}
-                        </span>
-                    </h3>
-                    <div class="table table-responsive">
-                        <table class="w-100">
-                            <thead class="bg-gray-100 text-xs">
+
+        <div class="row g-2">
+            <div class="{{ $isAdminView ? 'col-12 col-xl-7' : 'col-12 col-xl-6' }}">
+                <section class="dashboard-panel">
+                    <div class="dashboard-section-title">
+                        <div>
+                            <h3>Khách mời được đăng ký/nhập gần đây</h3>
+                            <p>Dùng để kiểm tra nhanh trạng thái dữ liệu mới cập nhật.</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table dashboard-table align-middle mb-0">
+                            <thead>
                                 <tr>
-                                    <th class="p-2 text-left">Thông tin</th>
-                                    <th class="p-2 text-left col-3">Tiến độ</th>
-                                    <th class="p-2 text-left">Diễn ra</th>
-                                    <th class="p-2 text-left">Trạng Thái</th>
-                                    <th class="p-2 text-left">Cập Nhật</th>
+                                    <th>Qrcode</th>
+                                    <th>Thông tin</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th>Cập nhật</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($eventsOnGoing as $event)
-                                    <tr class="text-xs" data-href="{{ route('admin.events.edit', $event) }}">
-                                        <td class="p-2">
-                                            {{ $event->name }}
+                                @forelse ($clientsx5 as $client)
+                                    <tr data-href="{{ route('admin.clients.edit', ['client' => $client]) }}">
+                                        <td class="dashboard-table__truncate">{{ $client->qrcode }}</td>
+                                        <td>
+                                            <div class="fw-semibold dashboard-table__truncate">{{ $client->name }}</div>
                                         </td>
-                                        <td class="p-2">
-                                            @include('components._progress', [
-                                                'completed' => $event->progress,
-                                                'total'     => $event->total,
-                                            ])
+                                        <td>{{ humanize_date($client->created_at, 'd/m/Y H:i:s') }}</td>
+                                        <td>
+                                            <label class="btn btn-sm {{ $client->getStatusClass() }}">{{ $client->getStatusText() }}</label>
                                         </td>
-                                        <td class="p-2">
-                                            @if ($event->from_date == $event->to_date)
-                                                @humanize_date($event->from_date, 'd/m/Y')
-                                            @else
-                                                @humanize_date($event->from_date, 'd/m/Y')
-                                                <br>
-                                                @humanize_date($event->to_date, 'd/m/Y')
-                                            @endif
-                                        </td>
-                                        <td class="p-2">
-                                            <label class="btn btn-xs {{ $event->getStatusClass() }}">
-                                                {{ $event->getStatusText() }}
-                                            </label>
-                                        </td>
-                                        <td class="p-2">
-                                            {{ $event->user?->name ?? '—' }}
-                                            <br>
-                                            @humanize_date($event->updated_at, 'd/m/Y H:i')
+                                        <td>
+                                            {{ $client->updated_by ? $client->user?->name : 'Không có' }}
+                                            <div class="text-muted small">{{ humanize_date($client->updated_at, 'd/m/Y H:i:s') }}</div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Chưa có dữ liệu khách mới.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
+                </section>
+            </div>
+
+            @if ($isAdminView)
+                <div class="col-12 col-xl-5">
+                    <section class="dashboard-panel">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Sự kiện đang triển khai</h3>
+                                <p>{{ !empty($eventsOnGoing) && $eventsOnGoing->count() ? $eventsOnGoing->count() : 0 }} sự kiện cần theo dõi tiếp.</p>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table dashboard-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Thông tin</th>
+                                        <th>Tiến độ</th>
+                                        <th>Diễn ra</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($eventsOnGoing as $event)
+                                        <tr data-href="{{ route('admin.events.edit', $event) }}">
+                                            <td>
+                                                <div class="fw-semibold dashboard-table__truncate">{{ $event->name }}</div>
+                                                <div class="text-muted small">{{ $event->user?->name ?? '—' }}</div>
+                                            </td>
+                                            <td>
+                                                @include('components._progress', [
+                                                    'completed' => $event->progress,
+                                                    'total' => $event->total,
+                                                ])
+                                            </td>
+                                            <td>
+                                                @if ($event->from_date == $event->to_date)
+                                                    {{ humanize_date($event->from_date, 'd/m/Y') }}
+                                                @else
+                                                    {{ humanize_date($event->from_date, 'd/m/Y') }}
+                                                    <br>
+                                                    {{ humanize_date($event->to_date, 'd/m/Y') }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <label class="btn btn-sm {{ $event->getStatusClass() }}">
+                                                    {{ $event->getStatusText() }}
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">Không có sự kiện đang triển khai.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
-            @endadmin
+            @else
+                <div class="col-12 col-xl-6">
+                    <section class="dashboard-panel">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Bảng số lượng checkin theo loại khách mời</h3>
+                                <p>So sánh số lượng đăng ký và số lượng đã checkin theo nhóm khách.</p>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table dashboard-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Loại khách mời</th>
+                                        <th class="text-center">Đăng ký</th>
+                                        <th class="text-center">Checkin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $types = array_unique(array_merge(
+                                            array_keys($registerByType ?? []),
+                                            array_keys($checkinByType ?? [])
+                                        ));
+                                    @endphp
+
+                                    @forelse ($types as $type)
+                                        <tr>
+                                            <td>{{ $type }}</td>
+                                            <td class="text-center">{{ $registerByType[$type] ?? 0 }}</td>
+                                            <td class="text-center">{{ $checkinByType[$type] ?? 0 }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">Không có dữ liệu</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="dashboard-panel mt-2">
+                        <div class="dashboard-section-title">
+                            <div>
+                                <h3>Bảng số lượng checkout theo loại khách mời</h3>
+                                <p>Giúp phát hiện nhóm khách đã checkout ít hơn dự kiến.</p>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table dashboard-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Loại khách mời</th>
+                                        <th class="text-center">Đăng ký</th>
+                                        <th class="text-center">Checkout</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $checkoutTypes = array_unique(array_merge(
+                                            array_keys($registerByType ?? []),
+                                            array_keys($checkoutByType ?? [])
+                                        ));
+                                    @endphp
+
+                                    @forelse ($checkoutTypes as $type)
+                                        <tr>
+                                            <td>{{ $type }}</td>
+                                            <td class="text-center">{{ $registerByType[$type] ?? 0 }}</td>
+                                            <td class="text-center">{{ $checkoutByType[$type] ?? 0 }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">Không có dữ liệu</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
 
 @push('admin_js')
-    {{-- chart --}}
     @vite([
-        'resources/js/admin/dashboard/detail.js'
+        'resources/js/admin/dashboard/detail.js',
     ])
     <script src="{{ asset('offlines/offline-js/chart.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const clientEventData = @json($clientEventData);
-            const totalClientData = {{ $totalClientData }};
-        });
-
         const month = @json($month);
         const labels = @json($register_sources);
         const registers = @json($registers);
@@ -554,14 +511,15 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    // label: 'Số Lượng',
                     data: registers,
                     backgroundColor: ['#fd7e14', '#0d6efd', '#198754', 'rgba(255,0,0,0.8)'],
-                    borderWidth: 1
+                    borderWidth: 1,
+                    borderRadius: 8,
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         display: false
@@ -570,12 +528,6 @@
                         display: false
                     }
                 },
-                legend: {
-                    display: false // filter
-                },
-                title: {
-                    display: false,
-                },
                 scales: {
                     y: {
                         beginAtZero: true
@@ -583,61 +535,14 @@
                 }
             }
         });
-
-        // const lineChart = new Chart(document.getElementById('lineChart'), {
-        //     type: 'line',
-        //     data: {
-        //         labels: labels,
-        //         datasets: [{
-        //                 label: 'Đăng ký landing page',
-        //                 data: [7, 12, 5, 9],
-        //                 borderColor: '#8B5CF6', // Purple
-        //                 backgroundColor: 'rgba(139, 92, 246, 0.2)',
-        //                 fill: true,
-        //                 tension: 0.1
-        //             },
-        //             {
-        //                 label: 'Gửi email thư mời',
-        //                 data: [5, 3, 9, 10],
-        //                 borderColor: '#3B82F6', // Blue
-        //                 backgroundColor: 'rgba(59, 130, 246, 0.2)',
-        //                 fill: true,
-        //                 tension: 0.1
-        //             },
-        //         ]
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         scales: {
-        //             y: {
-        //                 beginAtZero: true,
-        //                 title: {
-        //                     display: true,
-        //                     text: 'Số Lượng Sản Phẩm'
-        //                 }
-        //             }
-        //         },
-        //         plugins: {
-        //             legend: {
-        //                 position: 'top'
-        //             },
-        //             // title: {
-        //             //     display: true,
-        //             //     text: `Xu Hướng đầu vào sự kiện (Tháng ${month})`
-        //             // }
-        //         }
-        //     }
-        // });
     </script>
     @admin()
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Retrieve data from the controller
                 const provinceEventData = @json($provinceEventData);
                 const totalQuantity = {{ $totalQuantity }};
 
-                // Create pie chart
-                const pieChart2 = new Chart(document.getElementById('pieChartProviceEventData'), {
+                new Chart(document.getElementById('pieChartProviceEventData'), {
                     type: 'pie',
                     data: {
                         labels: provinceEventData.map(product =>
@@ -655,12 +560,13 @@
                                 '#20c997',
                                 '#6f42c1',
                                 '#e83e8c',
-                                '#6c757d', // Add more colors if needed, for "Others"
-                            ].slice(0, provinceEventData.length) // Ensure the number of colors matches the data length
+                                '#6c757d',
+                            ].slice(0, provinceEventData.length)
                         }]
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             tooltip: {
                                 callbacks: {
@@ -677,98 +583,4 @@
             });
         </script>
     @endadmin
-@endpush
-
-@push('admin_css')
-    {{-- tailwind --}}
-    <link href="{{ asset('offlines/offline-css/2.2.19-tailwind.min.css') }}" rel="stylesheet">
-    <style>
-        .content-block {
-            height: 140px;
-            max-height: 140px;
-        }
-        .step-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            padding: 10px 5px;
-            overflow-x: auto;
-        }
-        .step {
-            position: relative;
-            text-align: center;
-            flex: 1;
-            min-width: 10%;
-            z-index: 1;
-        }
-        .step-point {
-            position: relative;
-            text-align: center;
-            /* flex: 1; */
-            min-width: 5%;
-            z-index: 1;
-        }
-        .step a {
-            text-decoration: none;
-            color: #333;
-            display: block;
-            transition: transform 0.3s ease-in-out;
-        }
-        .step a:hover {
-            transform: translateY(-5px);
-            color: #0d6efd;
-        }
-        .circle {
-            width: 30px;
-            height: 30px;
-            background-color: #0d6efd;
-            color: #fff;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 18px;
-            transition: transform 0.3s ease-in-out;
-        }
-        .circle-sm {
-            width: 15px;
-            height: 15px;
-            background-color: #0d6efd;
-            color: #fff;
-            border-radius: 50%;
-            margin: 0 auto 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 18px;
-            transition: transform 0.3s ease-in-out;
-        }
-        .step a:hover .circle {
-            transform: scale(1.1);
-            background-color: #0b5ed7;
-        }
-        .line {
-            position: absolute;
-            top: 30%;
-            height: 4px;
-            background-color: #dee2e6;
-            left: 0;
-            right: 0;
-            z-index: 0;
-        }
-        @media (max-width: 576px) {
-            .step-wrapper {
-                flex-wrap: nowrap;
-                overflow-x: scroll;
-            }
-            .step {
-                flex: 0 0 auto;
-                margin: 0 30px;
-            }
-        }
-    </style>
 @endpush

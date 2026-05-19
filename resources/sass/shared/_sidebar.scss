@@ -1,12 +1,12 @@
 .admin-sidebar {
   position: fixed;
-  inset: 1.25rem auto 1.25rem 1.25rem;
+  inset: 1rem auto 1rem 1rem;
   z-index: 1040;
   display: flex;
   flex-direction: column;
-  width: 18rem;
+  width: 17.25rem;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 1.75rem;
+  border-radius: 1.55rem;
   background: linear-gradient(180deg, rgba(248, 250, 252, 0.98) 0%, rgba(241, 245, 249, 0.96) 100%);
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
   backdrop-filter: blur(14px);
@@ -14,7 +14,7 @@
 
 .admin-sidebar__header,
 .admin-sidebar__footer {
-  padding: 1.25rem 1.25rem 1rem;
+  padding: 1rem 1rem 0.85rem;
 }
 
 .admin-sidebar__header {
@@ -26,20 +26,20 @@
 
 .admin-sidebar__body {
   flex: 1;
-  padding: 1rem 0.9rem;
+  padding: 0.85rem 0.75rem;
   overflow-y: auto;
 }
 
 .admin-sidebar__section + .admin-sidebar__section {
-  margin-top: 1.2rem;
+  margin-top: 0.9rem;
 }
 
 .admin-sidebar__eyebrow {
   display: block;
-  margin-bottom: 0.75rem;
-  padding: 0 0.35rem;
+  margin-bottom: 0.55rem;
+  padding: 0 0.25rem;
   color: #64748b;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -49,11 +49,12 @@
 .admin-sidebar__link {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   width: 100%;
-  padding: 0.9rem 1rem;
-  border-radius: 1rem;
+  padding: 0.78rem 0.9rem;
+  border-radius: 0.95rem;
   color: #0f172a;
+  font-size: 0.96rem;
   font-weight: 600;
   transition: background-color 0.22s ease, color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
 }
@@ -88,14 +89,14 @@
 .admin-sidebar__group + .admin-sidebar__item,
 .admin-sidebar__item + .admin-sidebar__group,
 .admin-sidebar__group + .admin-sidebar__group {
-  margin-top: 0.35rem;
+  margin-top: 0.22rem;
 }
 
 .admin-sidebar__group-title {
   display: block;
-  padding: 0.75rem 1rem 0.5rem;
+  padding: 0.55rem 0.9rem 0.35rem;
   color: #64748b;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
@@ -105,7 +106,7 @@
 
 .admin-sidebar__submenu {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.2rem;
 }
 
 .admin-sidebar__link i,
@@ -117,17 +118,17 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.95rem 1rem;
+  padding: 0.8rem 0.9rem;
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.78);
   color: #475569;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
 .admin-sidebar__profile strong {
   display: block;
   color: #0f172a;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .admin-sidebar__profile-icon {
