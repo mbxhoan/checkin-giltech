@@ -1,22 +1,13 @@
-@extends('layouts.app')
+@extends('errors.layout')
 
-@section('title', '405 Method Not Allowed')
+@section('title', '405 Phương thức không hợp lệ')
 
 @section('content')
-    <div class="row justify-content-center py-5">
-        <div class="col-lg-6">
-            <div class="surface-card p-5 text-center">
-                <x-brand-lockup href="{{ route('home') }}" theme="light" class="justify-content-center mb-4" />
-                <span class="text-uppercase text-primary fw-bold small">405</span>
-                <h1 class="mt-2 mb-3">Phương thức không được hỗ trợ</h1>
-                <p class="text-secondary mb-4">
-                    Yêu cầu của bạn đã tới hệ thống, nhưng thao tác HTTP này không hợp lệ cho trang hiện tại.
-                </p>
-                <div class="d-flex flex-wrap justify-content-center gap-2">
-                    <a href="{{ url()->previous() }}" class="btn btn-primary">Quay lại</a>
-                    <a href="{{ route('home') }}" class="btn btn-light">Trang chủ</a>
-                </div>
-            </div>
-        </div>
+    <span class="badge">405</span>
+    <h1>Phương thức không được hỗ trợ</h1>
+    <p>Yêu cầu của bạn đã tới hệ thống, nhưng thao tác HTTP này không hợp lệ cho trang hiện tại.</p>
+    <div class="actions">
+        <a href="javascript:history.back()" class="btn btn-primary">Quay lại</a>
+        <a href="/" class="btn btn-light">Trang chủ</a>
     </div>
 @endsection
