@@ -225,6 +225,8 @@
 
     @stack('admin_js')
 
+    @stack('modals')
+
     @livewireScripts
 </body>
 </html>

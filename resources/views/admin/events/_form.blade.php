@@ -68,7 +68,6 @@
     </div>
     <div class="mb-3 col-md-2">
         @if ($model->isNew())
-            {{-- <input type="text" id="features" name="" value="" required> --}}
             <div class="form-group">
                 <label for="" class="form-label"></label>
                 <div class="mt-2">
@@ -79,50 +78,6 @@
                         <x-icon name="sliders"/>
                         Thiết lập tính năng
                     </a>
-                    <div class="modal fade" id="selectFeatureEventModal" data-bs-keyboard="true" tabindex="-1"
-                        aria-labelledby="selectFeatureEventModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="selectFeatureEventModalLabel">
-                                        Chọn tính năng
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-sm">
-                                    @foreach ($features as $key => $feature)
-                                        {{-- giữ những tính năng mặc định --}}
-                                        @if (in_array($key, [
-                                            "e-1",
-                                            "e-2",
-                                            "e-3",
-                                            "e-4",
-                                        ]))
-                                            <input type="hidden" name="features[]" value="{{ $key }}">
-                                        @else
-                                            <div class="row mb-1">
-                                                <div class="col-md-12">
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox" name="features[]" value="{{ $key }}"
-                                                                @checked(true)
-                                                            >
-                                                                {{ $feature['name'] }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                                        Đóng
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         @endif
@@ -166,3 +121,46 @@
         'rows'              => 1,
     ])
 </div>
+
+@if ($model->isNew())
+    @push('modals')
+    <div class="modal fade" id="selectFeatureEventModal" data-bs-keyboard="true" tabindex="-1"
+        aria-labelledby="selectFeatureEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="selectFeatureEventModalLabel">
+                        Chọn tính năng
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-sm">
+                    @foreach ($features as $key => $feature)
+                        @if (in_array($key, ["e-1", "e-2", "e-3", "e-4"]))
+                            <input type="hidden" name="features[]" value="{{ $key }}" form="event-detail-form">
+                        @else
+                            <div class="row mb-1">
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="features[]" value="{{ $key }}"
+                                                @checked(true) form="event-detail-form"
+                                            >
+                                                {{ $feature['name'] }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endpush
+@endif

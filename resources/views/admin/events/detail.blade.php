@@ -16,6 +16,7 @@
     'colLeft'   => 'col-md-12',
     'colRight'  => 'col-md-0',
     'formClass' => 'bg-light rounded shadow-sm p-2',
+    'formId'    => 'event-detail-form',
 ])
 
 @section('form-action', $model->isNew() ? route('admin.events.store') : route('admin.events.update', $model))
