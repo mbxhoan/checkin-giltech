@@ -11,28 +11,13 @@ export default defineConfig({
     }
   },
 
-  // server: {
-  //   host: true,
-  //   hmr: {
-  //     host: 'scan.checkin.delfi.local', // your custom domain
-  //     protocol: 'http', // if using http (not https)
-  //     port: 5173, // Vite dev server port
-  //   },
-  //   cors: true, // Allow CORS
-  // },
-
   server: {
     // Add this server configuration
     cors: {
       origin: '*', // Allow requests from any origin during development
-      // Or specify the exact origin of your Laravel app:
-      // origin: 'http://scan.checkin.delfi.local:8000',
       methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Allowed headers
     }
-    // If you have other server options, keep them here
-    // host: 'scan.checkin.delfi.local', // You might already have this
-    // port: 5173, // Or specify your dev server port
   },
 
   plugins: [

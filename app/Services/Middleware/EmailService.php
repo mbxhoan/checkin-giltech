@@ -34,7 +34,7 @@ class EmailService extends BaseService
             'From'                      => env('FROM_MAIL'),
             'To'                        => $email,
 
-            "TemplateId"                => $templateId, // DELFI - Register Successfully
+            "TemplateId"                => $templateId, // Register Successfully
             "TemplateModel"             => $variables,
 
             // 'Subject'                   => 'Welcome!',
